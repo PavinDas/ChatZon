@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatzone/api/apis.dart';
+import 'package:chatzone/helper/dialogs.dart';
 import 'package:chatzone/main.dart';
 import 'package:chatzone/models/chat_user.dart';
+import 'package:chatzone/screens/auth/screen_login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -21,26 +23,19 @@ class _ScreenProfileState extends State<ScreenProfile> {
         //* AppBar
         appBar: AppBar(
           //* Home Icon
-          leading: const Icon(
-            Icons.home,
+          leading:  IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          icon: const  Icon(Icons.arrow_back_outlined,
             size: 26,
+            ),
           ),
 
           //* App Title
           title: const Text('Profile'),
-          actions: [
-            //* Search Button
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.search),
-            ),
-
-            //* More Button
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.more_vert),
-            ),
-          ],
+          
+          
         ),
 
         //* Add user Floating Button
@@ -51,8 +46,25 @@ class _ScreenProfileState extends State<ScreenProfile> {
           ),
           child: FloatingActionButton.extended(
             onPressed: () async {
-              await APIs.auth.signOut();
-              await GoogleSignIn().signOut();
+              //* For showing progress dialog
+              Dialogs.showProgressBar(context);
+
+              //* SignOut from app
+              await APIs.auth.signOut().then(
+                (value) async {
+                  await GoogleSignIn().signOut().then(
+                    (value) {
+                      Navigator.pop(context);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ScreenLogin(),
+                        ),
+                      );
+                    },
+                  );
+                },
+              );
             },
             icon: const Icon(Icons.logout),
             label: const Text('LogOut'),
@@ -70,24 +82,42 @@ class _ScreenProfileState extends State<ScreenProfile> {
                 width: mq.width,
                 height: mq.height * .03,
               ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(mq.height * .1),
-                child: CachedNetworkImage(
-                  height: mq.height * .2,
-                  width: mq.height * .2,
-                  imageUrl: widget.user.image,
-                  fit: BoxFit.fill,
-                  placeholder: (context, url) {
-                    return const CircularProgressIndicator();
-                  },
-                  errorWidget: (context, url, error) {
-                    return const CircleAvatar(
-                      child: Icon(
-                        CupertinoIcons.person,
+              Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(mq.height * .1),
+                    child: CachedNetworkImage(
+                      height: mq.height * .2,
+                      width: mq.height * .2,
+                      imageUrl: widget.user.image,
+                      fit: BoxFit.fill,
+                      placeholder: (context, url) {
+                        return const CircularProgressIndicator();
+                      },
+                      errorWidget: (context, url, error) {
+                        return const CircleAvatar(
+                          child: Icon(
+                            CupertinoIcons.person,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: MaterialButton(
+                      onPressed: () {},
+                      color: Colors.white,
+                      elevation: 1,
+                      shape: const CircleBorder(),
+                      child: const Icon(
+                        Icons.edit,
+                        color: Colors.deepPurple,
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                ],
               ),
               //* Adding some space
               SizedBox(
@@ -163,7 +193,10 @@ class _ScreenProfileState extends State<ScreenProfile> {
               ElevatedButton.icon(
                 onPressed: () {},
                 icon: const Icon(Icons.done),
-                label: const Text('UPDATE',style: TextStyle(fontSize: 19),),
+                label: const Text(
+                  'UPDATE',
+                  style: TextStyle(fontSize: 19),
+                ),
                 style: ElevatedButton.styleFrom(
                     shape: const StadiumBorder(),
                     minimumSize: Size(

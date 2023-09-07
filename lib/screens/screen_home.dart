@@ -15,6 +15,13 @@ class ScreenHome extends StatefulWidget {
 
 class _ScreenHomeState extends State<ScreenHome> {
   List<ChatUser> list = [];
+
+  @override
+  void initState() {
+    super.initState();
+    APIs.getSelfInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +48,7 @@ class _ScreenHomeState extends State<ScreenHome> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>  ScreenProfile(user: list[0]),
+                  builder: (context) =>  ScreenProfile(user: APIs.me),
                 ),
               );
             },
@@ -64,8 +71,10 @@ class _ScreenHomeState extends State<ScreenHome> {
           child: const Icon(Icons.message),
         ),
       ),
+
+      //* Body of App
       body: StreamBuilder(
-        stream: APIs.firestore.collection('users').snapshots(),
+        stream: APIs.getAllUsers(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             //* if Data is loading
