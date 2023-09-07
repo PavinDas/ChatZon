@@ -1,5 +1,7 @@
 import 'package:chatzone/main.dart';
 import 'package:chatzone/screens/auth/screen_login.dart';
+import 'package:chatzone/screens/screen_home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ScreenSplash extends StatefulWidget {
@@ -14,12 +16,26 @@ class _ScreenSplashState extends State<ScreenSplash> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const ScreenLogin(),
-        ),
-      );
+
+      //* Checking the user is existing or not
+      
+      if (FirebaseAuth.instance.currentUser != null) {
+        print('\nuser: ${FirebaseAuth.instance.currentUser}');
+        print('\nuserAdditionalInfo: ${FirebaseAuth.instance.currentUser}');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ScreenHome(),
+          ),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ScreenLogin(),
+          ),
+        );
+      }
     });
   }
 

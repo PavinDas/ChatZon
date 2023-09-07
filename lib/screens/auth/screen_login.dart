@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:chatzone/helper/dialogs.dart';
 import 'package:chatzone/main.dart';
 import 'package:chatzone/screens/screen_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,39 +15,54 @@ class ScreenLogin extends StatefulWidget {
 }
 
 class _ScreenLoginState extends State<ScreenLogin> {
+
+  //* Actions for LogIn button
   _handleGoogleButtonClick() {
+    Dialogs.showProgressBar(context);
     _signInWithGoogle().then(
       (user) {
-        print('\nuser: ${user.user}');
-        print('\nuserAdditionalInfo: ${user.additionalUserInfo}');
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return const ScreenHome();
-            },
-          ),
-        );
+        Navigator.pop(context);
+        if (user != null) {
+          print('\nuser: ${user.user}');
+          print('\nuserAdditionalInfo: ${user.additionalUserInfo}');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return const ScreenHome();
+              },
+            ),
+          );
+        }
       },
     );
   }
 
-  Future<UserCredential> _signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  //* Firebase authenticator auto generated method
+  Future<UserCredential?> _signInWithGoogle() async {
+    try {
+      await InternetAddress.lookup('google.com');
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
 
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
 
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      print('\n_signInWithGoogle: $e');
+      Dialogs.showSnackbar(
+          context, 'Something went wrong. Check internet connection');
+      return null;
+    }
   }
 
   //* SignOut Function
@@ -65,12 +83,16 @@ class _ScreenLoginState extends State<ScreenLogin> {
       ),
       body: Stack(
         children: [
+
+          //* App Icon
           Positioned(
             top: mq.height * .15,
             left: mq.width * .26,
             width: mq.width * .5,
             child: Image.asset('assets/images/icon.png'),
           ),
+
+          //* Google LogIp icon
           Positioned(
             bottom: mq.height * .15,
             left: mq.width * .1,
@@ -80,6 +102,8 @@ class _ScreenLoginState extends State<ScreenLogin> {
               onPressed: () {
                 _handleGoogleButtonClick();
               },
+              
+              //* Google png logo
               icon: Padding(
                 padding: const EdgeInsets.all(15),
                 child: Image.asset('assets/images/google.png'),

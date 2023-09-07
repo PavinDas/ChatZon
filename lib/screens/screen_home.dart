@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class ScreenHome extends StatefulWidget {
   const ScreenHome({super.key});
@@ -11,10 +13,8 @@ class _ScreenHomeState extends State<ScreenHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       //* AppBar
       appBar: AppBar(
-
         //* Home Icon
         leading: const Icon(
           Icons.home,
@@ -24,7 +24,6 @@ class _ScreenHomeState extends State<ScreenHome> {
         //* App Title
         title: const Text('ChatZon'),
         actions: [
-
           //* Search Button
           IconButton(
             onPressed: () {},
@@ -46,7 +45,10 @@ class _ScreenHomeState extends State<ScreenHome> {
           right: 20,
         ),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () async {
+            await FirebaseAuth.instance.signOut();
+            await GoogleSignIn().signOut();
+          },
           child: const Icon(Icons.message),
         ),
       ),

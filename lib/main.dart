@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+//* Firebase initialize in flutter
 _initFirebase() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
