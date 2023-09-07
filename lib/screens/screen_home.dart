@@ -1,6 +1,7 @@
 import 'package:chatzone/api/apis.dart';
 import 'package:chatzone/main.dart';
 import 'package:chatzone/models/chat_user.dart';
+import 'package:chatzone/screens/screen_profile.dart';
 import 'package:chatzone/widgets/chat_user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -36,7 +37,14 @@ class _ScreenHomeState extends State<ScreenHome> {
 
           //* More Button
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  ScreenProfile(user: list[0]),
+                ),
+              );
+            },
             icon: const Icon(Icons.more_vert),
           ),
         ],
