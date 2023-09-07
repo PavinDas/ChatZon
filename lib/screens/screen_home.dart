@@ -3,6 +3,7 @@ import 'package:chatzone/main.dart';
 import 'package:chatzone/models/chat_user.dart';
 import 'package:chatzone/screens/screen_profile.dart';
 import 'package:chatzone/widgets/chat_user_card.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -14,7 +15,9 @@ class ScreenHome extends StatefulWidget {
 }
 
 class _ScreenHomeState extends State<ScreenHome> {
-  List<ChatUser> list = [];
+  List<ChatUser> _list = [];
+  final List<ChatUser> _searchList = [];
+  bool _isSearching = false;
 
   @override
   void initState() {
@@ -34,12 +37,54 @@ class _ScreenHomeState extends State<ScreenHome> {
         ),
 
         //* App Title
-        title: const Text('ChatZon'),
+        title: _isSearching
+            ? TextFormField(
+                style: const TextStyle(
+                    color: Colors.white, fontSize: 16, letterSpacing: .5),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: ' Enter Name or Email',
+                  hintStyle: TextStyle(
+                    color: Colors.white.withOpacity(.4),
+                  ),
+                ),
+                onChanged: (val) {
+                  //* logic for Search
+
+                  _searchList.clear();
+
+                  for (var i in _list) {
+                    if (i.name.toLowerCase().contains(
+                              val.toLowerCase(),
+                            ) ||
+                        i.email.toLowerCase().contains(
+                              val.toLowerCase(),
+                            )) {
+                      _searchList.add(i);
+                    }
+                    setState(
+                      () {
+                        _searchList;
+                      },
+                    );
+                  }
+                },
+                autofocus: true,
+              )
+            : const Text('ChatZon'),
         actions: [
           //* Search Button
           IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search),
+            onPressed: () {
+              setState(
+                () {
+                  _isSearching = !_isSearching;
+                },
+              );
+            },
+            icon: Icon(
+              _isSearching ? CupertinoIcons.clear_circled_solid : Icons.search,
+            ),
           ),
 
           //* More Button
@@ -48,7 +93,7 @@ class _ScreenHomeState extends State<ScreenHome> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>  ScreenProfile(user: APIs.me),
+                  builder: (context) => ScreenProfile(user: APIs.me),
                 ),
               );
             },
@@ -88,16 +133,17 @@ class _ScreenHomeState extends State<ScreenHome> {
             case ConnectionState.active:
             case ConnectionState.done:
               final data = snapshot.data?.docs;
-              list =
+              _list =
                   data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
 
-              if (list.isNotEmpty) {
+              if (_list.isNotEmpty) {
                 return ListView.builder(
-                  itemCount: list.length,
+                  itemCount: _isSearching ? _searchList.length : _list.length,
                   padding: EdgeInsets.only(top: mq.height * .008),
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
-                    return ChatUserCard(user: list[index]);
+                    return ChatUserCard(
+                        user: _isSearching ? _searchList[index] : _list[index]);
                     //return Text('Name: ${list[index]}');
                   },
                 );
