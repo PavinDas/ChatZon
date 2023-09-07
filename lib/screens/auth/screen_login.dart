@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chatzone/api/apis.dart';
 import 'package:chatzone/helper/dialogs.dart';
 import 'package:chatzone/main.dart';
 import 'package:chatzone/screens/screen_home.dart';
@@ -56,7 +57,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
       );
 
       // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      return await APIs.auth.signInWithCredential(credential);
     } catch (e) {
       print('\n_signInWithGoogle: $e');
       Dialogs.showSnackbar(

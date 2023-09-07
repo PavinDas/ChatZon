@@ -28,12 +28,14 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  cloud_firestore: ^4.9.1
   cupertino_icons: ^1.0.2
   firebase_auth: ^4.9.0
   firebase_sign_in: ^0.0.16
   flutter:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
+  multi_stream_builder: ^0.0.1
 
 flutter_launcher_icons:
   android: "ic_launcher"
