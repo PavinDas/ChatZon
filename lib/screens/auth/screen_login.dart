@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:chatzone/api/apis.dart';
 import 'package:chatzone/helper/dialogs.dart';
 import 'package:chatzone/main.dart';
@@ -16,24 +15,39 @@ class ScreenLogin extends StatefulWidget {
 }
 
 class _ScreenLoginState extends State<ScreenLogin> {
-
   //* Actions for LogIn button
   _handleGoogleButtonClick() {
     Dialogs.showProgressBar(context);
     _signInWithGoogle().then(
-      (user) {
+      (user) async {
         Navigator.pop(context);
         if (user != null) {
           print('\nuser: ${user.user}');
           print('\nuserAdditionalInfo: ${user.additionalUserInfo}');
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return const ScreenHome();
+
+          if ((await APIs.userExist())) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return const ScreenHome();
+                },
+              ),
+            );
+          } else {
+            await APIs.createUser().then(
+              (value) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const ScreenHome();
+                    },
+                  ),
+                );
               },
-            ),
-          );
+            );
+          }
         }
       },
     );
@@ -84,7 +98,6 @@ class _ScreenLoginState extends State<ScreenLogin> {
       ),
       body: Stack(
         children: [
-
           //* App Icon
           Positioned(
             top: mq.height * .15,
@@ -103,7 +116,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
               onPressed: () {
                 _handleGoogleButtonClick();
               },
-              
+
               //* Google png logo
               icon: Padding(
                 padding: const EdgeInsets.all(15),
