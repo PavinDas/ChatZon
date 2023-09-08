@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatzone/api/apis.dart';
 import 'package:chatzone/helper/dialogs.dart';
@@ -7,6 +9,7 @@ import 'package:chatzone/screens/auth/screen_login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ScreenProfile extends StatefulWidget {
   final ChatUser user;
@@ -18,6 +21,7 @@ class ScreenProfile extends StatefulWidget {
 
 class _ScreenProfileState extends State<ScreenProfile> {
   final _formKey = GlobalKey<FormState>();
+  String? _image;
 
   @override
   Widget build(BuildContext context) {
@@ -93,32 +97,41 @@ class _ScreenProfileState extends State<ScreenProfile> {
                   Stack(
                     children: [
                       //* Profile Picture
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(mq.height * .1),
-                        child: CachedNetworkImage(
-                          height: mq.height * .2,
-                          width: mq.height * .2,
-                          imageUrl: widget.user.image,
-                          fit: BoxFit.fill,
-                          placeholder: (context, url) {
-                            return const CircularProgressIndicator();
-                          },
-                          errorWidget: (context, url, error) {
-                            return const CircleAvatar(
-                              child: Icon(
-                                CupertinoIcons.person,
+
+                      _image != null
+                          ? ClipRRect(
+                              borderRadius:
+                                  BorderRadius.circular(mq.height * .1),
+                              child: Image.file(
+                                File(_image.toString()),
+                                height: mq.height * .2,
+                                width: mq.height * .2,
+                                fit: BoxFit.cover,
                               ),
-                            );
-                          },
-                        ),
-                      ),
+                            )
+                          : ClipRRect(
+                              borderRadius:
+                                  BorderRadius.circular(mq.height * .1),
+                              child: CachedNetworkImage(
+                                imageUrl: widget.user.image,
+                                height: mq.height * .2,
+                                width: mq.height * .2,
+                                fit: BoxFit.cover,
+                                errorWidget: (context, url, error) =>
+                                    const CircleAvatar(
+                                  child: Icon(CupertinoIcons.person),
+                                ),
+                              ),
+                            ),
 
                       //* Edit Icon on Profile Picture
                       Positioned(
                         bottom: 0,
                         right: 0,
                         child: MaterialButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            _showBottomSheet();
+                          },
                           color: Colors.white,
                           elevation: 1,
                           shape: const CircleBorder(),
@@ -247,6 +260,124 @@ class _ScreenProfileState extends State<ScreenProfile> {
           ),
         ),
       ),
+    );
+  }
+
+  //* Bottom sheet for picking a profile picture for user
+  _showBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      builder: (context) {
+        return ListView(
+          padding: EdgeInsets.only(
+            top: mq.height * .03,
+            bottom: mq.height * .05,
+          ),
+          children: [
+            const Text(
+              'Pick Profile Picture',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+
+            SizedBox(
+              height: mq.height * .02,
+            ),
+            //* Buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                //* Image picker button
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    backgroundColor: Colors.white,
+                    fixedSize: Size(
+                      mq.width * .3,
+                      mq.height * .15,
+                    ),
+                  ),
+
+                  //* Pick an image
+                  onPressed: () async {
+                    final ImagePicker picker = ImagePicker();
+                    // Pick an image.
+                    final XFile? image =
+                        await picker.pickImage(source: ImageSource.gallery);
+
+                    if (image != null) {
+                      print(
+                          '\nImage Path: ${image.path} -- MimeType: ${image.mimeType}');
+
+                      setState(
+                        () {
+                          _image = image.path;
+                        },
+                      );
+
+                      APIs.updateProfilePicture(
+                        File(_image!),
+                      );
+
+                      //* For hiding image picker
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Image.asset('assets/images/add_image.png'),
+                ),
+
+                //* Image capture button
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    backgroundColor: Colors.white,
+                    fixedSize: Size(
+                      mq.width * .3,
+                      mq.height * .15,
+                    ),
+                  ),
+
+                  //* Capture an image
+                  onPressed: () async {
+                    final ImagePicker picker = ImagePicker();
+                    // Pick an image.
+                    final XFile? image =
+                        await picker.pickImage(source: ImageSource.camera);
+
+                    if (image != null) {
+                      print('\nImage Path: ${image.path}');
+
+                      setState(
+                        () {
+                          _image = image.path;
+                        },
+                      );
+
+
+                      APIs.updateProfilePicture(
+                        File(_image!),
+                      );
+
+                      //* For hiding image picker
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Image.asset('assets/images/camera.png'),
+                ),
+              ],
+            )
+          ],
+        );
+      },
     );
   }
 }

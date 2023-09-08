@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:chatzone/models/chat_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class APIs {
   //* For authentication
@@ -8,6 +11,9 @@ class APIs {
 
   //* Accessing cloud FireStore database
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  //*  Accessing firebase storage
+  static FirebaseStorage storage = FirebaseStorage.instance;
 
   //* For storing current Information
   static late ChatUser me;
@@ -70,6 +76,29 @@ class APIs {
       {
         'name': me.name,
         'about': me.about,
+      },
+    );
+  }
+
+  //* Update profile picture
+  static updateProfilePicture(File file) async {
+    final ext = file.path.split('.').last;
+    print('\n Extension $ext');
+    final ref = storage.ref().child('profile_pictures/${user.uid}.$ext');
+    await ref
+        .putFile(
+      file,
+      SettableMetadata(contentType: 'image/$ext'),
+    )
+        .then(
+      (p0) {
+        print('\nData Transfered: ${p0.bytesTransferred / 1000} kb');
+      },
+    );
+    me.image = await ref.getDownloadURL();
+    await firestore.collection('users').doc(user.uid).update(
+      {
+        'image': me.image,
       },
     );
   }
