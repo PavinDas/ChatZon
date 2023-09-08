@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatzone/api/apis.dart';
 import 'package:chatzone/main.dart';
@@ -19,7 +17,11 @@ class ScreenChat extends StatefulWidget {
 }
 
 class _ScreenChatState extends State<ScreenChat> {
+  //* For storing all messages
   List<Message> _list = [];
+
+  //* For handling message text changes
+  final _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,47 +39,25 @@ class _ScreenChatState extends State<ScreenChat> {
           children: [
             Expanded(
               child: StreamBuilder(
-                stream: APIs.getAllMessages(),
+                stream: APIs.getAllMessages(widget.user),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     //* If Data is loading
                     case ConnectionState.waiting:
                     case ConnectionState.none:
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return const SizedBox();
 
                     //* if Some or all data is loaded then show it
                     case ConnectionState.active:
                     case ConnectionState.done:
                       final data = snapshot.data?.docs;
-                      print('Data: ${jsonEncode(data![0].data())}');
-                      // _list =
-                      //     data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
-                      //         [];
-
-
-                      _list.clear();
-                      _list.add(
-                        Message(
-                          toId: 'xyz',
-                          msg: 'hiii',
-                          read: '',
-                          type: Type.text,
-                          fromId: APIs.user.uid,
-                          sent: '12:32 am',
-                        ),
-                      );
-                      _list.add(
-                        Message(
-                          toId: APIs.user.uid,
-                          msg: 'hellooo',
-                          read: '',
-                          type: Type.text,
-                          fromId: 'xyz',
-                          sent: '12:38 am',
-                        ),
-                      );
+                      // print('Data: ${jsonEncode(data![0].data())}');
+                      _list = data
+                              ?.map(
+                                (e) => Message.fromJson(e.data()),
+                              )
+                              .toList() ??
+                          [];
 
                       if (_list.isNotEmpty) {
                         return ListView.builder(
@@ -221,6 +201,7 @@ class _ScreenChatState extends State<ScreenChat> {
                   //* Text Input Field
                   Expanded(
                     child: TextField(
+                      controller: _textController,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       decoration: InputDecoration(
@@ -264,7 +245,15 @@ class _ScreenChatState extends State<ScreenChat> {
 
           //* Message send button
           MaterialButton(
-            onPressed: () {},
+            onPressed: () {
+              if (_textController.text.isNotEmpty) {
+                APIs.sendMessage(
+                  widget.user,
+                  _textController.text,
+                );
+                _textController.text = '';
+              }
+            },
             color: Colors.white,
             padding: const EdgeInsets.only(
               top: 10,
