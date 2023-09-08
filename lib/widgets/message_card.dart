@@ -1,4 +1,5 @@
 import 'package:chatzone/api/apis.dart';
+import 'package:chatzone/helper/my_date_util.dart';
 import 'package:chatzone/main.dart';
 import 'package:chatzone/models/message.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,8 +22,15 @@ class _MessageCardState extends State<MessageCard> {
         : _inMessage();
   }
 
-  //* Sender or another user message
+  //! Received message
   Widget _inMessage() {
+    //* Update message read status
+    if (widget.message.read.isEmpty) {
+      APIs.updateMessageReadStatus(widget.message);
+      print('\n Read status updated');
+      setState(() {});
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -63,7 +71,10 @@ class _MessageCardState extends State<MessageCard> {
             right: mq.width * .04,
           ),
           child: Text(
-            widget.message.sent,
+            MyDateUtil.getFormatedTime(
+              context: context,
+              time: widget.message.sent,
+            ),
             style: const TextStyle(
               fontSize: 13,
               color: Colors.black54,
@@ -74,7 +85,7 @@ class _MessageCardState extends State<MessageCard> {
     );
   }
 
-  //* our or user message
+  //! Sended message
   Widget _outMessage() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,20 +96,26 @@ class _MessageCardState extends State<MessageCard> {
             SizedBox(
               width: mq.width * .04,
             ),
-            //* Double tick
-            const Icon(
-              Icons.done_all_rounded,
-              color: Colors.blue,
-              size: 20,
-            ),
+
+            //* Double tick for message read indication
+
+            // if(widget.message.read.isNotEmpty){
+
+            // },
+            if (widget.message.read.isNotEmpty)
+              const Icon(Icons.done_all_rounded, color: Colors.blue, size: 20),
 
             //* For adding some space
             const SizedBox(
               width: 2,
             ),
 
+            //* Sent time
             Text(
-              '${widget.message.read}12:22 pm',
+              MyDateUtil.getFormatedTime(
+                context: context,
+                time: widget.message.sent,
+              ),
               style: const TextStyle(
                 fontSize: 13,
                 color: Colors.black54,

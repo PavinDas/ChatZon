@@ -31,6 +31,7 @@ dependencies:
   cached_network_image: ^3.2.3
   cloud_firestore: ^4.9.1
   cupertino_icons: ^1.0.2
+  emoji_picker_flutter: ^1.6.1
   firebase_auth: ^4.9.0
   firebase_sign_in: ^0.0.16
   firebase_storage: ^11.2.6

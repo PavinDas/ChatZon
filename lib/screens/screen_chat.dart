@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatzone/api/apis.dart';
 import 'package:chatzone/main.dart';
 import 'package:chatzone/models/chat_user.dart';
 import 'package:chatzone/models/message.dart';
 import 'package:chatzone/widgets/message_card.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 class ScreenChat extends StatefulWidget {
   final ChatUser user;
@@ -23,71 +27,112 @@ class _ScreenChatState extends State<ScreenChat> {
   //* For handling message text changes
   final _textController = TextEditingController();
 
+  //* For showing or hiding emoji keyboard
+  bool _showEmoji = false;
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          flexibleSpace: _appBar(),
-        ),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
 
-        backgroundColor: Colors.deepPurple[50],
-
-        //* Body
-        body: Column(
-          children: [
-            Expanded(
-              child: StreamBuilder(
-                stream: APIs.getAllMessages(widget.user),
-                builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    //* If Data is loading
-                    case ConnectionState.waiting:
-                    case ConnectionState.none:
-                      return const SizedBox();
-
-                    //* if Some or all data is loaded then show it
-                    case ConnectionState.active:
-                    case ConnectionState.done:
-                      final data = snapshot.data?.docs;
-                      // print('Data: ${jsonEncode(data![0].data())}');
-                      _list = data
-                              ?.map(
-                                (e) => Message.fromJson(e.data()),
-                              )
-                              .toList() ??
-                          [];
-
-                      if (_list.isNotEmpty) {
-                        return ListView.builder(
-                          itemCount: _list.length,
-                          padding: EdgeInsets.only(top: mq.height * .008),
-                          physics: const BouncingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return MessageCard(
-                              message: _list[index],
-                            );
-                          },
-                        );
-                      } else {
-                        return const Center(
-                          child: Text(
-                            'Say hai 👋',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.deepPurple,
-                            ),
-                          ),
-                        );
-                      }
-                  }
+        setState(() {
+          if (_showEmoji) _showEmoji = !_showEmoji;
+        });
+      },
+      child: SafeArea(
+        child: WillPopScope(
+          //* If emojis is on & back button is pressed when search
+          //* or else simple close current screen on back button click
+          onWillPop: () {
+            if (_showEmoji) {
+              setState(
+                () {
+                  _showEmoji = !_showEmoji;
                 },
-              ),
+              );
+              return Future.value(false);
+            } else {
+              return Future.value(true);
+            }
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              flexibleSpace: _appBar(),
             ),
-            _chatInput(),
-          ],
+
+            backgroundColor: Colors.deepPurple[50],
+
+            //* Body
+            body: Column(
+              children: [
+                Expanded(
+                  child: StreamBuilder(
+                    stream: APIs.getAllMessages(widget.user),
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        //* If Data is loading
+                        case ConnectionState.waiting:
+                        case ConnectionState.none:
+                          return const SizedBox();
+
+                        //* if Some or all data is loaded then show it
+                        case ConnectionState.active:
+                        case ConnectionState.done:
+                          final data = snapshot.data?.docs;
+                          // print('Data: ${jsonEncode(data![0].data())}');
+                          _list = data
+                                  ?.map(
+                                    (e) => Message.fromJson(e.data()),
+                                  )
+                                  .toList() ??
+                              [];
+
+                          if (_list.isNotEmpty) {
+                            return ListView.builder(
+                              itemCount: _list.length,
+                              padding: EdgeInsets.only(top: mq.height * .008),
+                              physics: const BouncingScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return MessageCard(
+                                  message: _list[index],
+                                );
+                              },
+                            );
+                          } else {
+                            return const Center(
+                              child: Text(
+                                'Say hai 👋',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.deepPurple,
+                                ),
+                              ),
+                            );
+                          }
+                      }
+                    },
+                  ),
+                ),
+                _chatInput(),
+                if (_showEmoji)
+                  SizedBox(
+                    height: mq.height * .35,
+                    child: EmojiPicker(
+                      textEditingController: _textController,
+                      config: Config(
+                        bgColor:
+                            Color.fromARGB(255, 137, 52, 235).withOpacity(.07),
+                        columns: 8,
+                        emojiSizeMax: 32 * (Platform.isIOS ? 1.30 : 1.0),
+                      ),
+                    ),
+                  )
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -117,6 +162,7 @@ class _ScreenChatState extends State<ScreenChat> {
               height: mq.height * .047,
               width: mq.height * .047,
               imageUrl: widget.user.image,
+              fit: BoxFit.cover,
               placeholder: (context, url) {
                 return const CircularProgressIndicator();
               },
@@ -190,7 +236,12 @@ class _ScreenChatState extends State<ScreenChat> {
                 children: [
                   //* Emoji Button
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      setState(
+                        () => _showEmoji = !_showEmoji,
+                      );
+                    },
                     icon: const Icon(
                       Icons.emoji_emotions,
                     ),
@@ -204,6 +255,12 @@ class _ScreenChatState extends State<ScreenChat> {
                       controller: _textController,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
+                      onTap: () {
+                        FocusScope.of(context).unfocus();
+                        setState(() {
+                          if (_showEmoji) _showEmoji = !_showEmoji;
+                        });
+                      },
                       decoration: InputDecoration(
                         hintText: 'Type something...',
                         hintStyle: TextStyle(

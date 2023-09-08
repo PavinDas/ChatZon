@@ -33,6 +33,7 @@ class _ScreenHomeState extends State<ScreenHome> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      
       //* For hide keyboard when a tap is detected on screen
       onTap: () => FocusScope.of(context).unfocus(),
       child: WillPopScope(
@@ -142,10 +143,13 @@ class _ScreenHomeState extends State<ScreenHome> {
             ),
           ),
 
+        backgroundColor: Colors.deepPurple[50],
           //* Body of App
           body: StreamBuilder(
+            
             stream: APIs.getAllUsers(),
             builder: (context, snapshot) {
+              
               switch (snapshot.connectionState) {
                 //* if Data is loading
                 case ConnectionState.waiting:
