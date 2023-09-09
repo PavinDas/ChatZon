@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatzone/api/apis.dart';
 import 'package:chatzone/helper/my_date_util.dart';
 import 'package:chatzone/main.dart';
@@ -55,21 +56,44 @@ class _MessageCardState extends State<MessageCard> {
                 bottomRight: Radius.circular(30),
               ),
             ),
-            child: Text(
-              widget.message.msg,
-              style: const TextStyle(
-                fontSize: 15,
-                color: Colors.black87,
-              ),
-            ),
+            child: widget.message.type == Type.text
+
+                //* Show text
+                ? Text(
+                    widget.message.msg,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.black87,
+                    ),
+                  )
+
+                //* Show image
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      imageUrl: widget.message.msg,
+                      placeholder: (context, url) => const Padding(
+                        padding:  EdgeInsets.all(8.0),
+                        child:  CircularProgressIndicator(strokeWidth: 2,),
+                      ),
+                      errorWidget: (context, url, error) {
+                        return const Icon(
+                          Icons.image,
+                          size: 70,
+                        );
+                      },
+                    ),
+                  ),
           ),
         ),
 
         //* Message received time
         Padding(
-          padding: EdgeInsets.only(
-            right: mq.width * .04,
-          ),
+          padding: EdgeInsets.all(
+              widget.message.type == Type.image ? mq.width * .03 :
+              mq.width * .04,
+            ),
           child: Text(
             MyDateUtil.getFormatedTime(
               context: context,
@@ -128,6 +152,7 @@ class _MessageCardState extends State<MessageCard> {
         Flexible(
           child: Container(
             padding: EdgeInsets.all(
+              widget.message.type == Type.image ? mq.width * .03 :
               mq.width * .04,
             ),
             margin: EdgeInsets.symmetric(
@@ -145,13 +170,35 @@ class _MessageCardState extends State<MessageCard> {
                 bottomLeft: Radius.circular(30),
               ),
             ),
-            child: Text(
-              widget.message.msg,
-              style: const TextStyle(
-                fontSize: 15,
-                color: Colors.black87,
-              ),
-            ),
+            child: widget.message.type == Type.text
+
+                //* Show text
+                ? Text(
+                    widget.message.msg,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.black87,
+                    ),
+                  )
+
+                //* Show image
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      imageUrl: widget.message.msg,
+                      placeholder: (context, url) => const Padding(
+                        padding:  EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator(strokeWidth: 2,),
+                      ),
+                      errorWidget: (context, url, error) {
+                        return const Icon(
+                          Icons.image,
+                          size: 70,
+                        );
+                      },
+                    ),
+                  ),
           ),
         ),
       ],

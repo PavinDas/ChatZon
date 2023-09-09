@@ -6,7 +6,6 @@ import 'package:chatzone/models/chat_user.dart';
 import 'package:chatzone/models/message.dart';
 import 'package:chatzone/screens/screen_chat.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 class ChatUserCard extends StatefulWidget {
@@ -90,7 +89,11 @@ class _ChatUserCardState extends State<ChatUserCard> {
 
               //* Last Message
               subtitle: Text(
-                _message != null ? _message!.msg : widget.user.about,
+                _message != null
+                    ? _message!.type == Type.image
+                        ? 'Image'
+                        : _message!.msg
+                    : widget.user.about,
                 maxLines: 1,
               ),
 

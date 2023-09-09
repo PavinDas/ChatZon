@@ -9,7 +9,7 @@ import 'package:chatzone/widgets/message_card.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' as foundation;
+import 'package:image_picker/image_picker.dart';
 
 class ScreenChat extends StatefulWidget {
   final ChatUser user;
@@ -27,8 +27,9 @@ class _ScreenChatState extends State<ScreenChat> {
   //* For handling message text changes
   final _textController = TextEditingController();
 
-  //* For showing or hiding emoji keyboard
-  bool _showEmoji = false;
+  //* showEmoji --> For showing or hiding emoji keyboard
+  //* isUploading --> For checking any images are uploading or not
+  bool _showEmoji = false, _isUploading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +92,7 @@ class _ScreenChatState extends State<ScreenChat> {
 
                           if (_list.isNotEmpty) {
                             return ListView.builder(
+                              reverse: true,
                               itemCount: _list.length,
                               padding: EdgeInsets.only(top: mq.height * .008),
                               physics: const BouncingScrollPhysics(),
@@ -116,7 +118,26 @@ class _ScreenChatState extends State<ScreenChat> {
                     },
                   ),
                 ),
+
+                //* Progress indicator for image uploading
+                if (_isUploading)
+                  const Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 20,
+                      ),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                      ),
+                    ),
+                  ),
+
+                //* Chat input field
                 _chatInput(),
+
+                //* Show emoji on keyboard
                 if (_showEmoji)
                   SizedBox(
                     height: mq.height * .35,
@@ -273,7 +294,31 @@ class _ScreenChatState extends State<ScreenChat> {
 
                   //* Gallery Button
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      final ImagePicker picker = ImagePicker();
+
+                      //*  Pick multiple image.
+                      final List<XFile> images = await picker.pickMultiImage(
+                        imageQuality: 70,
+                      );
+
+                      //* Uploading and sending images one by one
+                      for (var i in images) {
+                        print('\nImage Path: ${i.path}');
+
+                        setState(
+                          () => _isUploading = true,
+                        );
+
+                        await APIs.sendChatImage(
+                          widget.user,
+                          File(i.path),
+                        );
+                        setState(
+                          () => _isUploading = false,
+                        );
+                      }
+                    },
                     icon: const Icon(
                       Icons.image,
                     ),
@@ -283,7 +328,30 @@ class _ScreenChatState extends State<ScreenChat> {
 
                   //* Camera Button
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      final ImagePicker picker = ImagePicker();
+                      // Pick an image.
+                      final XFile? image = await picker.pickImage(
+                        source: ImageSource.camera,
+                        imageQuality: 70,
+                      );
+
+                      if (image != null) {
+                        print('\nImage Path: ${image.path}');
+                        setState(
+                          () => _isUploading = true,
+                        );
+
+                        await APIs.sendChatImage(
+                          widget.user,
+                          File(image.path),
+                        );
+
+                        setState(
+                          () => _isUploading = false,
+                        );
+                      }
+                    },
                     icon: const Icon(
                       Icons.camera_alt,
                     ),
@@ -304,10 +372,7 @@ class _ScreenChatState extends State<ScreenChat> {
           MaterialButton(
             onPressed: () {
               if (_textController.text.isNotEmpty) {
-                APIs.sendMessage(
-                  widget.user,
-                  _textController.text,
-                );
+                APIs.sendMessage(widget.user, _textController.text, Type.text);
                 _textController.text = '';
               }
             },

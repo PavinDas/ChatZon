@@ -118,11 +118,12 @@ class APIs {
       ChatUser user) {
     return firestore
         .collection('chats/${getConversationId(user.id)}/messages/')
+        .orderBy('sent', descending: true)
         .snapshots();
   }
 
   //* For sending message
-  static sendMessage(ChatUser chatUser, String msg) async {
+  static sendMessage(ChatUser chatUser, String msg, Type type) async {
     //* Message sending time ( Also used as ID )
     final time = DateTime.now().millisecondsSinceEpoch.toString();
 
@@ -131,7 +132,7 @@ class APIs {
       toId: chatUser.id,
       msg: msg,
       read: '',
-      type: Type.text,
+      type: type,
       fromId: user.uid,
       sent: time,
     );
@@ -158,8 +159,32 @@ class APIs {
       ChatUser user) {
     return firestore
         .collection('chats/${getConversationId(user.id)}/messages/')
-        .orderBy('sent',descending: true)
+        .orderBy('sent', descending: true)
         .limit(1)
         .snapshots();
+  }
+
+  //* Send image in chat
+  static sendChatImage(ChatUser chatUser, File file) async {
+    final ext = file.path.split('.').last;
+
+    final ref = storage.ref().child(
+        'image/${getConversationId(chatUser.id)}/${DateTime.now().millisecondsSinceEpoch}.$ext');
+
+    //* Upload image
+    await ref
+        .putFile(
+      file,
+      SettableMetadata(contentType: 'image/$ext'),
+    )
+        .then(
+      (p0) {
+        print('\nData Transfered: ${p0.bytesTransferred / 1000} kb');
+      },
+    );
+
+    //* Updating image in firestore database
+    final imageURL = await ref.getDownloadURL();
+    await sendMessage(chatUser, imageURL, Type.image);
   }
 }

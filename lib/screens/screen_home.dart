@@ -33,7 +33,6 @@ class _ScreenHomeState extends State<ScreenHome> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      
       //* For hide keyboard when a tap is detected on screen
       onTap: () => FocusScope.of(context).unfocus(),
       child: WillPopScope(
@@ -143,13 +142,12 @@ class _ScreenHomeState extends State<ScreenHome> {
             ),
           ),
 
-        backgroundColor: Colors.deepPurple[50],
+          backgroundColor: Colors.deepPurple[50],
           //* Body of App
           body: StreamBuilder(
             
             stream: APIs.getAllUsers(),
             builder: (context, snapshot) {
-              
               switch (snapshot.connectionState) {
                 //* if Data is loading
                 case ConnectionState.waiting:
@@ -168,15 +166,16 @@ class _ScreenHomeState extends State<ScreenHome> {
 
                   if (_list.isNotEmpty) {
                     return ListView.builder(
+                      
                       itemCount:
                           _isSearching ? _searchList.length : _list.length,
                       padding: EdgeInsets.only(top: mq.height * .008),
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (context, index) {
                         return ChatUserCard(
-                            user: _isSearching
-                                ? _searchList[index]
-                                : _list[index]);
+                          user:
+                              _isSearching ? _searchList[index] : _list[index],
+                        );
                         //return Text('Name: ${list[index]}');
                       },
                     );
