@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatzone/api/apis.dart';
+import 'package:chatzone/helper/my_date_util.dart';
 import 'package:chatzone/main.dart';
 import 'package:chatzone/models/chat_user.dart';
 import 'package:chatzone/models/message.dart';
@@ -163,76 +164,94 @@ class _ScreenChatState extends State<ScreenChat> {
   Widget _appBar() {
     return InkWell(
       onTap: () {},
-      child: Row(
-        children: [
-          //* Back Button
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back_outlined,
-              color: Colors.white,
-            ),
-          ),
+      child: StreamBuilder(
+        stream: APIs.getUserInfo(widget.user),
+        builder: (context, snapshot) {
+          final data = snapshot.data?.docs;
+          // print('Data: ${jsonEncode(data![0].data())}');
+          final list =
+              data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
 
-          //* Profile picture
-          ClipRRect(
-            borderRadius: BorderRadius.circular(mq.height * .3),
-            child: CachedNetworkImage(
-              height: mq.height * .047,
-              width: mq.height * .047,
-              imageUrl: widget.user.image,
-              fit: BoxFit.cover,
-              placeholder: (context, url) {
-                return const CircularProgressIndicator();
-              },
-              errorWidget: (context, url, error) {
-                return const CircleAvatar(
-                  child: Icon(
-                    CupertinoIcons.person,
-                  ),
-                );
-              },
-            ),
-          ),
-
-          //* Adding some space
-          const SizedBox(
-            width: 10,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          return Row(
             children: [
-              //* Name of user
-              Text(
-                widget.user.name,
-                style: const TextStyle(
-                  fontSize: 16,
+              //* Back Button
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(
+                  Icons.arrow_back_outlined,
                   color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0.6,
+                ),
+              ),
+
+              //* Profile picture
+              ClipRRect(
+                borderRadius: BorderRadius.circular(mq.height * .3),
+                child: CachedNetworkImage(
+                  height: mq.height * .047,
+                  width: mq.height * .047,
+                  imageUrl: list.isNotEmpty ? list[0].image : widget.user.image,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) {
+                    return const CircularProgressIndicator();
+                  },
+                  errorWidget: (context, url, error) {
+                    return const CircleAvatar(
+                      child: Icon(
+                        CupertinoIcons.person,
+                      ),
+                    );
+                  },
                 ),
               ),
 
               //* Adding some space
               const SizedBox(
-                height: 2,
+                width: 10,
               ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //* Name of user
+                  Text(
+                    list.isNotEmpty ? list[0].name : widget.user.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.6,
+                    ),
+                  ),
 
-              //* Online status or Last seen
-              const Text(
-                'Last seen recently',
-                style: TextStyle(
-                  fontSize: 9,
-                  color: Colors.white,
-                  letterSpacing: .6,
-                ),
+                  //* Adding some space
+                  const SizedBox(
+                    height: 2,
+                  ),
+
+                  //* Online status or Last seen
+                  Text(
+                    list.isNotEmpty
+                        ? list[0].isOnline
+                            ? 'Online'
+                            : MyDateUtil.getLastActiveTime(
+                                context: context,
+                                lastActive: list[0].lastActive)
+                        : MyDateUtil.getLastActiveTime(
+                            context: context,
+                            lastActive: widget.user.lastActive),
+                    style: const TextStyle(
+                      fontSize: 9,
+                      color: Colors.white,
+                      letterSpacing: .6,
+                    ),
+                  ),
+                ],
               ),
             ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }

@@ -49,12 +49,8 @@ class _ChatUserCardState extends State<ChatUserCard> {
           builder: (context, snapshot) {
             final data = snapshot.data?.docs;
             // print('Data: ${jsonEncode(data![0].data())}');
-            final list = data
-                    ?.map(
-                      (e) => Message.fromJson(e.data()),
-                    )
-                    .toList() ??
-                [];
+            final list =
+                data?.map((e) => Message.fromJson(e.data())).toList() ?? [];
             if (list.isNotEmpty) _message = list[0];
 
             return ListTile(

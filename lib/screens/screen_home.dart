@@ -5,6 +5,7 @@ import 'package:chatzone/screens/screen_profile.dart';
 import 'package:chatzone/widgets/chat_user_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class ScreenHome extends StatefulWidget {
@@ -28,6 +29,21 @@ class _ScreenHomeState extends State<ScreenHome> {
   void initState() {
     super.initState();
     APIs.getSelfInfo();
+    SystemChannels.lifecycle.setMessageHandler(
+      (message) {
+
+        //* For setting user status to active
+        APIs.updateActiveStatus(true);
+
+        //* For updating user active status according to lifecycle events
+        //? resume --> active or online
+        //? pause --> inactive or offline
+        if (message.toString().contains('resume')) APIs.updateActiveStatus(true);
+        if (message.toString().contains('pause')) APIs.updateActiveStatus(false);
+
+        return Future.value(message);
+      },
+    );
   }
 
   @override
@@ -145,7 +161,6 @@ class _ScreenHomeState extends State<ScreenHome> {
           backgroundColor: Colors.deepPurple[50],
           //* Body of App
           body: StreamBuilder(
-            
             stream: APIs.getAllUsers(),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
@@ -166,7 +181,6 @@ class _ScreenHomeState extends State<ScreenHome> {
 
                   if (_list.isNotEmpty) {
                     return ListView.builder(
-                      
                       itemCount:
                           _isSearching ? _searchList.length : _list.length,
                       padding: EdgeInsets.only(top: mq.height * .008),
