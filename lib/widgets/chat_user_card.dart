@@ -5,6 +5,7 @@ import 'package:chatzone/main.dart';
 import 'package:chatzone/models/chat_user.dart';
 import 'package:chatzone/models/message.dart';
 import 'package:chatzone/screens/screen_chat.dart';
+import 'package:chatzone/widgets/dialogs/profile_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
 
   @override
   Widget build(BuildContext context) {
+    //* Contact card
     return Card(
       margin: EdgeInsets.symmetric(
         horizontal: mq.width * .01,
@@ -55,23 +57,31 @@ class _ChatUserCardState extends State<ChatUserCard> {
 
             return ListTile(
               //* User profile picture
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(mq.height * .3),
-                child: CachedNetworkImage(
-                  height: mq.height * .055,
-                  width: mq.height * .055,
-                  imageUrl: widget.user.image,
-                  placeholder: (context, url) {
-                    return const CircularProgressIndicator();
-                  },
-                  errorWidget: (context, url, error) {
-                    return const CircleAvatar(
-                      child: Icon(
-                        CupertinoIcons.person,
-                      ),
-                    );
-                  },
-                  fit: BoxFit.cover,
+              leading: InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => ProfileDialog(user: widget.user),
+                  );
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(mq.height * .3),
+                  child: CachedNetworkImage(
+                    height: mq.height * .055,
+                    width: mq.height * .055,
+                    imageUrl: widget.user.image,
+                    placeholder: (context, url) {
+                      return const CircularProgressIndicator();
+                    },
+                    errorWidget: (context, url, error) {
+                      return const CircleAvatar(
+                        child: Icon(
+                          CupertinoIcons.person,
+                        ),
+                      );
+                    },
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               //* User Name
