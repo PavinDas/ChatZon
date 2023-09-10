@@ -29,7 +29,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
         vertical: 4,
       ),
       elevation: 0.5,
-      color: Colors.deepPurple[100],
+      color: Colors.indigo[100],
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(6),
       ),

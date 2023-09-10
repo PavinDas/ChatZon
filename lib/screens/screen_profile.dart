@@ -6,6 +6,7 @@ import 'package:chatzone/helper/dialogs.dart';
 import 'package:chatzone/main.dart';
 import 'package:chatzone/models/chat_user.dart';
 import 'package:chatzone/screens/auth/screen_login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -29,6 +30,7 @@ class _ScreenProfileState extends State<ScreenProfile> {
       //* Hide keyboard while tap anywhere in the screen
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        backgroundColor: Colors.indigo[50],
         //* AppBar
         appBar: AppBar(
           //* Home Icon
@@ -46,7 +48,7 @@ class _ScreenProfileState extends State<ScreenProfile> {
           title: const Text('Profile'),
         ),
 
-        //* Add user Floating Button
+        //* LogOut Floating Button
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(
             bottom: 25,
@@ -57,12 +59,20 @@ class _ScreenProfileState extends State<ScreenProfile> {
               //* For showing progress dialog
               Dialogs.showProgressBar(context);
 
+              await APIs.updateActiveStatus(false);
+
               //* SignOut from app
               await APIs.auth.signOut().then(
                 (value) async {
                   await GoogleSignIn().signOut().then(
                     (value) {
+
+                      //* For hiding progress dialog
                       Navigator.pop(context);
+
+                      APIs.auth = FirebaseAuth.instance;
+
+                      //* Replace profile scree with Login screen
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -76,185 +86,202 @@ class _ScreenProfileState extends State<ScreenProfile> {
             },
             icon: const Icon(Icons.logout),
             label: const Text('LogOut'),
-            backgroundColor: Colors.red[400],
+            backgroundColor: Colors.pink[900],
           ),
         ),
         //* Body
-        body: Form(
-          key: _formKey,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: mq.width * .05,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  //* Adding some space
-                  SizedBox(
-                    width: mq.width,
-                    height: mq.height * .03,
-                  ),
-                  Stack(
-                    children: [
-                      //* Profile Picture
-
-                      _image != null
-                          ? ClipRRect(
-                              borderRadius:
-                                  BorderRadius.circular(mq.height * .1),
-                              child: Image.file(
-                                File(_image.toString()),
-                                height: mq.height * .2,
-                                width: mq.height * .2,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                          : ClipRRect(
-                              borderRadius:
-                                  BorderRadius.circular(mq.height * .1),
-                              child: CachedNetworkImage(
-                                imageUrl: widget.user.image,
-                                height: mq.height * .2,
-                                width: mq.height * .2,
-                                fit: BoxFit.cover,
-                                errorWidget: (context, url, error) =>
-                                    const CircleAvatar(
-                                  child: Icon(CupertinoIcons.person),
+        body: Container(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: mq.width * .05,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    //* Adding some space
+                    SizedBox(
+                      width: mq.width,
+                      height: mq.height * .03,
+                    ),
+                    Stack(
+                      children: [
+                        //* Profile Picture
+        
+                        _image != null
+                            ? ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(mq.height * .1),
+                                child: Image.file(
+                                  File(_image.toString()),
+                                  height: mq.height * .2,
+                                  width: mq.height * .2,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(mq.height * .1),
+                                child: CachedNetworkImage(
+                                  imageUrl: widget.user.image,
+                                  height: mq.height * .2,
+                                  width: mq.height * .2,
+                                  fit: BoxFit.cover,
+                                  errorWidget: (context, url, error) =>
+                                      const CircleAvatar(
+                                    child: Icon(
+                                      CupertinoIcons.person,
+                                    ),
+                                  ),
                                 ),
                               ),
+        
+                        //* Edit Icon on Profile Picture
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: MaterialButton(
+                            onPressed: () {
+                              _showBottomSheet();
+                            },
+                            color: Colors.white,
+                            elevation: 1,
+                            shape: const CircleBorder(),
+                            child: const Icon(
+                              Icons.edit,
+                              color: Colors.indigo,
                             ),
-
-                      //* Edit Icon on Profile Picture
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: MaterialButton(
-                          onPressed: () {
-                            _showBottomSheet();
-                          },
-                          color: Colors.white,
-                          elevation: 1,
-                          shape: const CircleBorder(),
-                          child: const Icon(
-                            Icons.edit,
-                            color: Colors.deepPurple,
+                          ),
+                        ),
+                      ],
+                    ),
+                    //* Adding some space
+                    SizedBox(
+                      width: mq.width,
+                      height: mq.height * .03,
+                    ),
+        
+                    //* User mail text
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(),
+                        color: Colors.indigo[400],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          widget.user.email,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  //* Adding some space
-                  SizedBox(
-                    width: mq.width,
-                    height: mq.height * .03,
-                  ),
-
-                  //* User mail text
-                  Text(
-                    widget.user.email,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
                     ),
-                  ),
-                  //* Adding some space
-                  SizedBox(
-                    width: mq.width,
-                    height: mq.height * .05,
-                  ),
-
-                  //* Name input field
-                  TextFormField(
-                    initialValue: widget.user.name,
-                    onSaved: (val) => APIs.me.name = val ?? '',
-                    validator: (val) =>
-                        val != null && val.isNotEmpty ? null : 'Required Field',
-                    style: const TextStyle(
-                      color: Colors.black87,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 19,
+                    //* Adding some space
+                    SizedBox(
+                      width: mq.width,
+                      height: mq.height * .05,
                     ),
-                    //* Name input field decoration
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(
-                        Icons.person,
-                        color: Colors.deepPurple,
+        
+                    //* Name input field
+                    TextFormField(
+                      initialValue: widget.user.name,
+                      onSaved: (val) => APIs.me.name = val ?? '',
+                      validator: (val) =>
+                          val != null && val.isNotEmpty ? null : 'Required Field',
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 19,
                       ),
+                      //* Name input field decoration
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(
+                          Icons.person,
+                          color: Colors.indigo,
+                        ),
+                        label: const Text(
+                          'Name',
+                          style: TextStyle(color: Colors.indigo),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    //* Adding some space
+                    SizedBox(
+                      width: mq.width,
+                      height: mq.height * .05,
+                    ),
+        
+                    //* About input field
+                    TextFormField(
+                      initialValue: widget.user.about,
+                      onSaved: (val) => APIs.me.about = val ?? '',
+                      validator: (val) =>
+                          val != null && val.isNotEmpty ? null : 'Required Field',
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 19,
+                      ),
+        
+                      //* About input field decoration
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(
+                          Icons.info_outline,
+                          color: Colors.indigo,
+                        ),
+                        label: const Text(
+                          'About',
+                          style: TextStyle(color: Colors.indigo),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    //* Adding some space
+                    SizedBox(
+                      width: mq.width,
+                      height: mq.height * .05,
+                    ),
+        
+                    //* Update profile button
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                          APIs.updateUserInfo().then(
+                            (value) {
+                              Dialogs.showSnackbar(context, 'Profile Updated');
+                            },
+                          );
+                        }
+                      },
+                      icon: const Icon(Icons.done),
                       label: const Text(
-                        'Name',
-                        style: TextStyle(color: Colors.deepPurple),
+                        'UPDATE',
+                        style: TextStyle(fontSize: 19),
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+        
+                      //* Update profile button decoration
+                      style: ElevatedButton.styleFrom(
+                          shape: const StadiumBorder(),
+                          minimumSize: Size(
+                            mq.width * .5,
+                            mq.height * .06,
+                            
+                          )),
                     ),
-                  ),
-                  //* Adding some space
-                  SizedBox(
-                    width: mq.width,
-                    height: mq.height * .05,
-                  ),
-
-                  //* About input field
-                  TextFormField(
-                    initialValue: widget.user.about,
-                    onSaved: (val) => APIs.me.about = val ?? '',
-                    validator: (val) =>
-                        val != null && val.isNotEmpty ? null : 'Required Field',
-                    style: const TextStyle(
-                      color: Colors.black87,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 19,
-                    ),
-
-                    //* About input field decoration
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(
-                        Icons.info_outline,
-                        color: Colors.deepPurple,
-                      ),
-                      label: const Text(
-                        'About',
-                        style: TextStyle(color: Colors.deepPurple),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
-                  //* Adding some space
-                  SizedBox(
-                    width: mq.width,
-                    height: mq.height * .05,
-                  ),
-
-                  //* Update profile button
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        APIs.updateUserInfo().then(
-                          (value) {
-                            Dialogs.showSnackbar(context, 'Profile Updated');
-                          },
-                        );
-                      }
-                    },
-                    icon: const Icon(Icons.done),
-                    label: const Text(
-                      'UPDATE',
-                      style: TextStyle(fontSize: 19),
-                    ),
-
-                    //* Update profile button decoration
-                    style: ElevatedButton.styleFrom(
-                        shape: const StadiumBorder(),
-                        minimumSize: Size(
-                          mq.width * .5,
-                          mq.height * .06,
-                        )),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -361,7 +388,6 @@ class _ScreenProfileState extends State<ScreenProfile> {
                           _image = image.path;
                         },
                       );
-
 
                       APIs.updateProfilePicture(
                         File(_image!),

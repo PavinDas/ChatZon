@@ -29,17 +29,29 @@ class _ScreenHomeState extends State<ScreenHome> {
   void initState() {
     super.initState();
     APIs.getSelfInfo();
+
+    //* For setting user status to active
+    APIs.updateActiveStatus(true);
+
+    //* For updating user active status according to lifecycle events
+    //? resume --> active or online
+    //? pause --> inactive or offline
     SystemChannels.lifecycle.setMessageHandler(
       (message) {
+        print('\nMessage: $message');
 
-        //* For setting user status to active
-        APIs.updateActiveStatus(true);
 
-        //* For updating user active status according to lifecycle events
-        //? resume --> active or online
-        //? pause --> inactive or offline
-        if (message.toString().contains('resume')) APIs.updateActiveStatus(true);
-        if (message.toString().contains('pause')) APIs.updateActiveStatus(false);
+      
+        if (APIs.auth.currentUser != null) {
+
+          if (message.toString().contains('resume')) {
+            APIs.updateActiveStatus(true);
+          }
+          if (message.toString().contains('pause')) {
+            APIs.updateActiveStatus(false);
+          }
+          
+        }
 
         return Future.value(message);
       },
@@ -158,7 +170,7 @@ class _ScreenHomeState extends State<ScreenHome> {
             ),
           ),
 
-          backgroundColor: Colors.deepPurple[50],
+          backgroundColor: Colors.indigo[50],
           //* Body of App
           body: StreamBuilder(
             stream: APIs.getAllUsers(),

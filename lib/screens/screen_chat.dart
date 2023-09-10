@@ -6,6 +6,7 @@ import 'package:chatzone/helper/my_date_util.dart';
 import 'package:chatzone/main.dart';
 import 'package:chatzone/models/chat_user.dart';
 import 'package:chatzone/models/message.dart';
+import 'package:chatzone/screens/screen_view_profile%20.dart';
 import 'package:chatzone/widgets/message_card.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
@@ -64,7 +65,7 @@ class _ScreenChatState extends State<ScreenChat> {
               flexibleSpace: _appBar(),
             ),
 
-            backgroundColor: Colors.deepPurple[50],
+            backgroundColor: Colors.indigo[50],
 
             //* Body
             body: Column(
@@ -110,7 +111,7 @@ class _ScreenChatState extends State<ScreenChat> {
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w700,
-                                  color: Colors.deepPurple,
+                                  color: Colors.indigo,
                                 ),
                               ),
                             );
@@ -145,8 +146,7 @@ class _ScreenChatState extends State<ScreenChat> {
                     child: EmojiPicker(
                       textEditingController: _textController,
                       config: Config(
-                        bgColor:
-                            Color.fromARGB(255, 137, 52, 235).withOpacity(.07),
+                        bgColor: Colors.indigo.withOpacity(.09),
                         columns: 8,
                         emojiSizeMax: 32 * (Platform.isIOS ? 1.30 : 1.0),
                       ),
@@ -163,7 +163,14 @@ class _ScreenChatState extends State<ScreenChat> {
   //* AppBar widget
   Widget _appBar() {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ScreenViewProfile(user: widget.user),
+          ),
+        );
+      },
       child: StreamBuilder(
         stream: APIs.getUserInfo(widget.user),
         builder: (context, snapshot) {
@@ -285,7 +292,7 @@ class _ScreenChatState extends State<ScreenChat> {
                     icon: const Icon(
                       Icons.emoji_emotions,
                     ),
-                    color: Colors.deepPurpleAccent,
+                    color: Colors.indigo,
                     iconSize: 25,
                   ),
 
@@ -304,7 +311,7 @@ class _ScreenChatState extends State<ScreenChat> {
                       decoration: InputDecoration(
                         hintText: 'Type something...',
                         hintStyle: TextStyle(
-                          color: Colors.deepPurple.withOpacity(.3),
+                          color: Colors.indigo.withOpacity(.3),
                         ),
                         border: InputBorder.none,
                       ),
@@ -341,7 +348,7 @@ class _ScreenChatState extends State<ScreenChat> {
                     icon: const Icon(
                       Icons.image,
                     ),
-                    color: Colors.deepPurpleAccent,
+                    color: Colors.indigo,
                     iconSize: 26,
                   ),
 
@@ -374,7 +381,7 @@ class _ScreenChatState extends State<ScreenChat> {
                     icon: const Icon(
                       Icons.camera_alt,
                     ),
-                    color: Colors.deepPurpleAccent,
+                    color: Colors.indigo,
                     iconSize: 26,
                   ),
 
@@ -404,7 +411,7 @@ class _ScreenChatState extends State<ScreenChat> {
             ),
             child: Icon(
               Icons.send,
-              color: Colors.deepPurpleAccent,
+              color: Colors.indigo,
               size: 27,
             ),
             shape: const CircleBorder(),
