@@ -31,7 +31,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
         vertical: 4,
       ),
       elevation: 0.5,
-      color: Colors.indigo[100],
+      color:const Color.fromARGB(255, 137, 214, 210),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(6),
       ),
@@ -89,7 +89,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                 widget.user.name,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
-                  color: Colors.black87,
+                  color: Colors.white,
                 ),
               ),
 

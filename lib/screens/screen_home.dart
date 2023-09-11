@@ -30,9 +30,6 @@ class _ScreenHomeState extends State<ScreenHome> {
     super.initState();
     APIs.getSelfInfo();
 
-    //* For setting user status to active
-    APIs.updateActiveStatus(true);
-
     //* For updating user active status according to lifecycle events
     //? resume --> active or online
     //? pause --> inactive or offline
@@ -40,17 +37,13 @@ class _ScreenHomeState extends State<ScreenHome> {
       (message) {
         print('\nMessage: $message');
 
-
-      
         if (APIs.auth.currentUser != null) {
-
           if (message.toString().contains('resume')) {
             APIs.updateActiveStatus(true);
           }
           if (message.toString().contains('pause')) {
             APIs.updateActiveStatus(false);
           }
-          
         }
 
         return Future.value(message);
@@ -81,10 +74,17 @@ class _ScreenHomeState extends State<ScreenHome> {
         child: Scaffold(
           //* AppBar
           appBar: AppBar(
+            backgroundColor: const Color.fromARGB(255, 77, 179, 162),
             //* Home Icon
-            leading: const Icon(
-              Icons.home,
-              size: 26,
+            leading: const Padding(
+              padding: EdgeInsets.only(top: 17, left: 8),
+              child: Text(
+                'Home',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                ),
+              ),
             ),
 
             //* App Title
@@ -133,10 +133,12 @@ class _ScreenHomeState extends State<ScreenHome> {
                     },
                   );
                 },
-                icon: Icon(
-                  _isSearching
-                      ? CupertinoIcons.clear_circled_solid
-                      : Icons.search,
+                icon: const Text(
+                  'Search',
+                  style: TextStyle(
+                    fontSize: 10.4,
+                    color: Colors.white,
+                  ),
                 ),
               ),
 
@@ -150,7 +152,10 @@ class _ScreenHomeState extends State<ScreenHome> {
                     ),
                   );
                 },
-                icon: const Icon(Icons.more_vert),
+                icon: const Icon(
+                  Icons.more_vert,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),
@@ -166,11 +171,15 @@ class _ScreenHomeState extends State<ScreenHome> {
                 await APIs.auth.signOut();
                 await GoogleSignIn().signOut();
               },
-              child: const Icon(Icons.message),
+              backgroundColor: Color.fromARGB(255, 77, 179, 162),
+              child: const Icon(
+                Icons.message,
+                color: Colors.white,
+              ),
             ),
           ),
 
-          backgroundColor: Colors.indigo[50],
+          backgroundColor: const Color.fromARGB(255, 206, 240, 238),
           //* Body of App
           body: StreamBuilder(
             stream: APIs.getAllUsers(),

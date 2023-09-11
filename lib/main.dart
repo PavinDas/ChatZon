@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'ChatZone',
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
+        primarySwatch:  Colors.lightBlue,
         appBarTheme: const AppBarTheme(
           centerTitle: true,
           elevation: 1,

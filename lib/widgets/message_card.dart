@@ -46,9 +46,9 @@ class _MessageCardState extends State<MessageCard> {
               vertical: mq.height * .01,
             ),
             decoration: BoxDecoration(
-              color: Colors.indigo[100],
+              color: Color.fromARGB(255, 194, 227, 235),
               border: Border.all(
-                color: Colors.indigo,
+                color: Colors.blue,
               ),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(30),
@@ -160,9 +160,9 @@ class _MessageCardState extends State<MessageCard> {
               vertical: mq.height * .01,
             ),
             decoration: BoxDecoration(
-              color: Colors.indigoAccent[100],
+              color: Color.fromARGB(255, 219, 236, 236),
               border: Border.all(
-                color: Colors.blue,
+                color: Colors.green,
               ),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(30),

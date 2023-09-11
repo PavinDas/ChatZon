@@ -91,6 +91,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
     mq = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: Colors.indigo[50],
       //* AppBar
       appBar: AppBar(
         //* App Title

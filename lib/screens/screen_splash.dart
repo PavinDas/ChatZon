@@ -16,7 +16,6 @@ class _ScreenSplashState extends State<ScreenSplash> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 2), () {
-
       //* Checking the user is existing or not
 
       if (APIs.auth.currentUser != null) {
@@ -42,11 +41,11 @@ class _ScreenSplashState extends State<ScreenSplash> {
     mq = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.indigo[50],
       //* AppBar
       appBar: AppBar(
         //* App Title
-        title: const Text(''), backgroundColor: Colors.white, elevation: 0,
+        title: const Text(''), backgroundColor: Colors.indigo[50], elevation: 0,
       ),
       body: Stack(
         children: [

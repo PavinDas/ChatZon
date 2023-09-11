@@ -30,9 +30,10 @@ class _ScreenProfileState extends State<ScreenProfile> {
       //* Hide keyboard while tap anywhere in the screen
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: Colors.indigo[50],
+        backgroundColor: Color.fromARGB(255, 206, 240, 238),
         //* AppBar
         appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 77, 179, 162),
           //* Home Icon
           leading: IconButton(
             onPressed: () {
@@ -41,11 +42,12 @@ class _ScreenProfileState extends State<ScreenProfile> {
             icon: const Icon(
               Icons.arrow_back_outlined,
               size: 26,
+              color: Colors.white,
             ),
           ),
 
           //* App Title
-          title: const Text('Profile'),
+          title: const Text('My Profile'),
         ),
 
         //* LogOut Floating Button
@@ -66,7 +68,6 @@ class _ScreenProfileState extends State<ScreenProfile> {
                 (value) async {
                   await GoogleSignIn().signOut().then(
                     (value) {
-
                       //* For hiding progress dialog
                       Navigator.pop(context);
 
@@ -85,8 +86,9 @@ class _ScreenProfileState extends State<ScreenProfile> {
               );
             },
             icon: const Icon(Icons.logout),
+            foregroundColor: Colors.white,
             label: const Text('LogOut'),
-            backgroundColor: Colors.pink[900],
+            backgroundColor: Color.fromARGB(255, 77, 179, 162),
           ),
         ),
         //* Body
@@ -108,7 +110,7 @@ class _ScreenProfileState extends State<ScreenProfile> {
                     Stack(
                       children: [
                         //* Profile Picture
-        
+
                         _image != null
                             ? ClipRRect(
                                 borderRadius:
@@ -136,7 +138,7 @@ class _ScreenProfileState extends State<ScreenProfile> {
                                   ),
                                 ),
                               ),
-        
+
                         //* Edit Icon on Profile Picture
                         Positioned(
                           bottom: 0,
@@ -150,7 +152,7 @@ class _ScreenProfileState extends State<ScreenProfile> {
                             shape: const CircleBorder(),
                             child: const Icon(
                               Icons.edit,
-                              color: Colors.indigo,
+                              color: Color.fromARGB(255, 77, 179, 162),
                             ),
                           ),
                         ),
@@ -161,12 +163,12 @@ class _ScreenProfileState extends State<ScreenProfile> {
                       width: mq.width,
                       height: mq.height * .03,
                     ),
-        
+
                     //* User mail text
                     Container(
                       decoration: BoxDecoration(
                         border: Border.all(),
-                        color: Colors.indigo[400],
+                        color: Color.fromARGB(255, 77, 179, 162),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Padding(
@@ -174,11 +176,10 @@ class _ScreenProfileState extends State<ScreenProfile> {
                         child: Text(
                           widget.user.email,
                           style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1
-                          ),
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1),
                         ),
                       ),
                     ),
@@ -187,15 +188,16 @@ class _ScreenProfileState extends State<ScreenProfile> {
                       width: mq.width,
                       height: mq.height * .05,
                     ),
-        
+
                     //* Name input field
                     TextFormField(
                       initialValue: widget.user.name,
                       onSaved: (val) => APIs.me.name = val ?? '',
-                      validator: (val) =>
-                          val != null && val.isNotEmpty ? null : 'Required Field',
+                      validator: (val) => val != null && val.isNotEmpty
+                          ? null
+                          : 'Required Field',
                       style: const TextStyle(
-                        color: Colors.black87,
+                        color: Color.fromARGB(255, 66, 88, 79),
                         fontWeight: FontWeight.w600,
                         fontSize: 19,
                       ),
@@ -203,11 +205,13 @@ class _ScreenProfileState extends State<ScreenProfile> {
                       decoration: InputDecoration(
                         prefixIcon: const Icon(
                           Icons.person,
-                          color: Colors.indigo,
+                          color: Color.fromARGB(255, 77, 179, 162),
                         ),
                         label: const Text(
                           'Name',
-                          style: TextStyle(color: Colors.indigo),
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 77, 179, 162),
+                          ),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -219,28 +223,31 @@ class _ScreenProfileState extends State<ScreenProfile> {
                       width: mq.width,
                       height: mq.height * .05,
                     ),
-        
+
                     //* About input field
                     TextFormField(
                       initialValue: widget.user.about,
                       onSaved: (val) => APIs.me.about = val ?? '',
-                      validator: (val) =>
-                          val != null && val.isNotEmpty ? null : 'Required Field',
+                      validator: (val) => val != null && val.isNotEmpty
+                          ? null
+                          : 'Required Field',
                       style: const TextStyle(
-                        color: Colors.black87,
+                        color:Color.fromARGB(255, 66, 88, 79),
                         fontWeight: FontWeight.w600,
                         fontSize: 19,
                       ),
-        
+
                       //* About input field decoration
                       decoration: InputDecoration(
                         prefixIcon: const Icon(
                           Icons.info_outline,
-                          color: Colors.indigo,
+                          color: Color.fromARGB(255, 77, 179, 162),
                         ),
                         label: const Text(
                           'About',
-                          style: TextStyle(color: Colors.indigo),
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 77, 179, 162),
+                          ),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -252,7 +259,7 @@ class _ScreenProfileState extends State<ScreenProfile> {
                       width: mq.width,
                       height: mq.height * .05,
                     ),
-        
+
                     //* Update profile button
                     ElevatedButton.icon(
                       onPressed: () {
@@ -265,20 +272,27 @@ class _ScreenProfileState extends State<ScreenProfile> {
                           );
                         }
                       },
-                      icon: const Icon(Icons.done),
+                      icon: const Icon(
+                        Icons.done,
+                        color: Colors.white,
+                      ),
                       label: const Text(
                         'UPDATE',
-                        style: TextStyle(fontSize: 19),
+                        style: TextStyle(
+                          fontSize: 19,
+                          color: Colors.white,
+                        ),
                       ),
-        
+
                       //* Update profile button decoration
                       style: ElevatedButton.styleFrom(
-                          shape: const StadiumBorder(),
-                          minimumSize: Size(
-                            mq.width * .5,
-                            mq.height * .06,
-                            
-                          )),
+                        shape: const StadiumBorder(),
+                        minimumSize: Size(
+                          mq.width * .5,
+                          mq.height * .06,
+                        ),
+                        backgroundColor: Color.fromARGB(255, 77, 179, 162),
+                      ),
                     ),
                   ],
                 ),

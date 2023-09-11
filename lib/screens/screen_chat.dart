@@ -62,10 +62,10 @@ class _ScreenChatState extends State<ScreenChat> {
           child: Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              flexibleSpace: _appBar(),
+              flexibleSpace: _appBar(),backgroundColor: Color.fromARGB(255, 77, 179, 162),
             ),
 
-            backgroundColor: Colors.indigo[50],
+            backgroundColor: Color.fromARGB(255, 206, 240, 238),
 
             //* Body
             body: Column(
@@ -274,7 +274,7 @@ class _ScreenChatState extends State<ScreenChat> {
         children: [
           Expanded(
             child: Card(
-              color: Colors.white,
+              color: Color.fromARGB(255, 239, 241, 241),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -292,7 +292,7 @@ class _ScreenChatState extends State<ScreenChat> {
                     icon: const Icon(
                       Icons.emoji_emotions,
                     ),
-                    color: Colors.indigo,
+                    color:const Color.fromARGB(255, 77, 179, 162),
                     iconSize: 25,
                   ),
 
@@ -311,7 +311,7 @@ class _ScreenChatState extends State<ScreenChat> {
                       decoration: InputDecoration(
                         hintText: 'Type something...',
                         hintStyle: TextStyle(
-                          color: Colors.indigo.withOpacity(.3),
+                          color: const Color.fromARGB(255, 77, 179, 162).withOpacity(.6),
                         ),
                         border: InputBorder.none,
                       ),
@@ -348,7 +348,7 @@ class _ScreenChatState extends State<ScreenChat> {
                     icon: const Icon(
                       Icons.image,
                     ),
-                    color: Colors.indigo,
+                    color: const Color.fromARGB(255, 77, 179, 162),
                     iconSize: 26,
                   ),
 
@@ -381,7 +381,7 @@ class _ScreenChatState extends State<ScreenChat> {
                     icon: const Icon(
                       Icons.camera_alt,
                     ),
-                    color: Colors.indigo,
+                    color: const Color.fromARGB(255, 77, 179, 162),
                     iconSize: 26,
                   ),
 
@@ -402,7 +402,7 @@ class _ScreenChatState extends State<ScreenChat> {
                 _textController.text = '';
               }
             },
-            color: Colors.white,
+            color: Color.fromARGB(255, 239, 241, 241),
             padding: const EdgeInsets.only(
               top: 10,
               bottom: 10,
@@ -411,7 +411,7 @@ class _ScreenChatState extends State<ScreenChat> {
             ),
             child: Icon(
               Icons.send,
-              color: Colors.indigo,
+              color:Color.fromARGB(255, 77, 179, 162),
               size: 27,
             ),
             shape: const CircleBorder(),

@@ -20,9 +20,10 @@ class _ScreenViewProfileState extends State<ScreenViewProfile> {
       //* Hide keyboard while tap anywhere in the screen
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: Colors.indigo[50],
+        backgroundColor: Color.fromARGB(255, 206, 240, 238),
         //* AppBar
         appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 77, 179, 162),
           //* Home Icon
           leading: IconButton(
             onPressed: () {
@@ -31,6 +32,7 @@ class _ScreenViewProfileState extends State<ScreenViewProfile> {
             icon: const Icon(
               Icons.arrow_back_outlined,
               size: 26,
+              color: Colors.white,
             ),
           ),
 
@@ -103,7 +105,7 @@ class _ScreenViewProfileState extends State<ScreenViewProfile> {
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Colors.indigo,
+                        color: Color.fromARGB(255, 66, 88, 79),
                       ),
                       borderRadius: BorderRadius.circular(20),
                       color: Colors.white54,
@@ -116,7 +118,7 @@ class _ScreenViewProfileState extends State<ScreenViewProfile> {
                           Text(
                             'About: ',
                             style: TextStyle(
-                              color: Colors.deepPurple[900],
+                              color:Color.fromARGB(255, 43, 70, 58),
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 1,
@@ -126,7 +128,7 @@ class _ScreenViewProfileState extends State<ScreenViewProfile> {
                             widget.user.about,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Colors.indigo[500],
+                              color: Color.fromARGB(255, 66, 88, 79),
                               fontSize: 16,
                             ),
                           ),
@@ -144,7 +146,7 @@ class _ScreenViewProfileState extends State<ScreenViewProfile> {
                   Container(
                     decoration: BoxDecoration(
                         border: Border.all(
-                          color: Colors.indigo,
+                          color: Color.fromARGB(255, 66, 88, 79),
                         ),
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.white54),
@@ -159,7 +161,7 @@ class _ScreenViewProfileState extends State<ScreenViewProfile> {
                             widget.user.email,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Colors.indigo[500],
+                              color: Color.fromARGB(255, 66, 88, 79),
                               fontSize: 16,
                             ),
                           ),
