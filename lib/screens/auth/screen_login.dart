@@ -94,6 +94,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
       backgroundColor: Colors.indigo[50],
       //* AppBar
       appBar: AppBar(
+        backgroundColor:  Color.fromARGB(255, 77, 179, 162),
         //* App Title
         title: const Text('Welcome to ChatZon'),
       ),
@@ -114,6 +115,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
             width: mq.width * .8,
             height: mq.height * .07,
             child: ElevatedButton.icon(
+              
               onPressed: () {
                 _handleGoogleButtonClick();
               },
@@ -140,6 +142,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
               style: ElevatedButton.styleFrom(
                 shape: const StadiumBorder(),
                 elevation: 1,
+                backgroundColor:  Color.fromARGB(255, 77, 179, 162),
               ),
             ),
           ),
