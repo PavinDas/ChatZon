@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chatzone/api/apis.dart';
 import 'package:chatzone/main.dart';
 import 'package:chatzone/models/chat_user.dart';
@@ -35,7 +37,7 @@ class _ScreenHomeState extends State<ScreenHome> {
     //? pause --> inactive or offline
     SystemChannels.lifecycle.setMessageHandler(
       (message) {
-        print('\nMessage: $message');
+        log('\nMessage: $message');
 
         if (APIs.auth.currentUser != null) {
           if (message.toString().contains('resume')) {
@@ -74,7 +76,7 @@ class _ScreenHomeState extends State<ScreenHome> {
         child: Scaffold(
           //* AppBar
           appBar: AppBar(
-            backgroundColor: const Color.fromARGB(255, 77, 179, 162),
+            backgroundColor: Colors.deepPurple,
             //* Home Icon
             leading: const Padding(
               padding: EdgeInsets.only(top: 17, left: 8),
@@ -91,7 +93,10 @@ class _ScreenHomeState extends State<ScreenHome> {
             title: _isSearching
                 ? TextFormField(
                     style: const TextStyle(
-                        color: Colors.white, fontSize: 16, letterSpacing: .5),
+                      color: Colors.white,
+                      fontSize: 16,
+                      letterSpacing: .5,
+                    ),
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: ' Enter Name or Email',
@@ -171,7 +176,7 @@ class _ScreenHomeState extends State<ScreenHome> {
                 await APIs.auth.signOut();
                 await GoogleSignIn().signOut();
               },
-              backgroundColor: Color.fromARGB(255, 77, 179, 162),
+              backgroundColor: Colors.deepPurple,
               child: const Icon(
                 Icons.message,
                 color: Colors.white,
@@ -179,7 +184,7 @@ class _ScreenHomeState extends State<ScreenHome> {
             ),
           ),
 
-          backgroundColor: const Color.fromARGB(255, 206, 240, 238),
+          backgroundColor: Colors.indigo[50],
           //* Body of App
           body: StreamBuilder(
             stream: APIs.getAllUsers(),
@@ -220,6 +225,7 @@ class _ScreenHomeState extends State<ScreenHome> {
                         'No connection found!',
                         style: TextStyle(
                           fontSize: 20,
+                          color: Colors.deepPurple,
                         ),
                       ),
                     );

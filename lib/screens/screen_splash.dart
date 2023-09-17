@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chatzone/api/apis.dart';
 import 'package:chatzone/main.dart';
 import 'package:chatzone/screens/auth/screen_login.dart';
@@ -19,7 +21,7 @@ class _ScreenSplashState extends State<ScreenSplash> {
       //* Checking the user is existing or not
 
       if (APIs.auth.currentUser != null) {
-        print('\nuser: ${APIs.auth.currentUser}');
+        log('\nuser: ${APIs.auth.currentUser}');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -62,10 +64,11 @@ class _ScreenSplashState extends State<ScreenSplash> {
               child: Text(
                 'Welcome',
                 style: TextStyle(
-                    letterSpacing: 1,
-                    fontSize: 19,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.deepPurple),
+                  letterSpacing: 1,
+                  fontSize: 19,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple,
+                ),
               ),
             ),
           ),

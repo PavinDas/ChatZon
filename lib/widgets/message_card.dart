@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatzone/api/apis.dart';
 import 'package:chatzone/helper/my_date_util.dart';
@@ -28,7 +30,7 @@ class _MessageCardState extends State<MessageCard> {
     //* Update message read status
     if (widget.message.read.isEmpty) {
       APIs.updateMessageReadStatus(widget.message);
-      print('\n Read status updated');
+      log('\n Read status updated');
       setState(() {});
     }
 
@@ -46,7 +48,7 @@ class _MessageCardState extends State<MessageCard> {
               vertical: mq.height * .01,
             ),
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 194, 227, 235),
+              color: const Color.fromARGB(255, 194, 227, 235),
               border: Border.all(
                 color: Colors.blue,
               ),
@@ -74,8 +76,10 @@ class _MessageCardState extends State<MessageCard> {
                       fit: BoxFit.cover,
                       imageUrl: widget.message.msg,
                       placeholder: (context, url) => const Padding(
-                        padding:  EdgeInsets.all(8.0),
-                        child:  CircularProgressIndicator(strokeWidth: 2,),
+                        padding: EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
                       ),
                       errorWidget: (context, url, error) {
                         return const Icon(
@@ -91,9 +95,8 @@ class _MessageCardState extends State<MessageCard> {
         //* Message received time
         Padding(
           padding: EdgeInsets.all(
-              widget.message.type == Type.image ? mq.width * .03 :
-              mq.width * .04,
-            ),
+            widget.message.type == Type.image ? mq.width * .03 : mq.width * .04,
+          ),
           child: Text(
             MyDateUtil.getFormatedTime(
               context: context,
@@ -127,7 +130,11 @@ class _MessageCardState extends State<MessageCard> {
 
             // },
             if (widget.message.read.isNotEmpty)
-              const Icon(Icons.done_all_rounded, color: Colors.blue, size: 20),
+              const Icon(
+                Icons.done_all_rounded,
+                color: Colors.blue,
+                size: 20,
+              ),
 
             //* For adding some space
             const SizedBox(
@@ -152,15 +159,16 @@ class _MessageCardState extends State<MessageCard> {
         Flexible(
           child: Container(
             padding: EdgeInsets.all(
-              widget.message.type == Type.image ? mq.width * .03 :
-              mq.width * .04,
+              widget.message.type == Type.image
+                  ? mq.width * .03
+                  : mq.width * .04,
             ),
             margin: EdgeInsets.symmetric(
               horizontal: mq.width * .04,
               vertical: mq.height * .01,
             ),
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 219, 236, 236),
+              color: const Color.fromARGB(255, 219, 236, 236),
               border: Border.all(
                 color: Colors.green,
               ),
@@ -188,8 +196,10 @@ class _MessageCardState extends State<MessageCard> {
                       fit: BoxFit.cover,
                       imageUrl: widget.message.msg,
                       placeholder: (context, url) => const Padding(
-                        padding:  EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(strokeWidth: 2,),
+                        padding: EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
                       ),
                       errorWidget: (context, url, error) {
                         return const Icon(

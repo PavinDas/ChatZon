@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -62,10 +63,10 @@ class _ScreenChatState extends State<ScreenChat> {
           child: Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              flexibleSpace: _appBar(),backgroundColor: Color.fromARGB(255, 77, 179, 162),
+              flexibleSpace: _appBar(),backgroundColor: Colors.deepPurple,
             ),
 
-            backgroundColor: Color.fromARGB(255, 206, 240, 238),
+            backgroundColor:Colors.indigo[50],
 
             //* Body
             body: Column(
@@ -111,7 +112,7 @@ class _ScreenChatState extends State<ScreenChat> {
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w700,
-                                  color: Colors.indigo,
+                                  color:Colors.deepPurple,
                                 ),
                               ),
                             );
@@ -274,7 +275,7 @@ class _ScreenChatState extends State<ScreenChat> {
         children: [
           Expanded(
             child: Card(
-              color: Color.fromARGB(255, 239, 241, 241),
+              color: const Color.fromARGB(255, 239, 241, 241),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -292,7 +293,7 @@ class _ScreenChatState extends State<ScreenChat> {
                     icon: const Icon(
                       Icons.emoji_emotions,
                     ),
-                    color:const Color.fromARGB(255, 77, 179, 162),
+                    color:Colors.deepPurple,
                     iconSize: 25,
                   ),
 
@@ -311,7 +312,7 @@ class _ScreenChatState extends State<ScreenChat> {
                       decoration: InputDecoration(
                         hintText: 'Type something...',
                         hintStyle: TextStyle(
-                          color: const Color.fromARGB(255, 77, 179, 162).withOpacity(.6),
+                          color:Colors.deepPurple.withOpacity(.6),
                         ),
                         border: InputBorder.none,
                       ),
@@ -330,7 +331,7 @@ class _ScreenChatState extends State<ScreenChat> {
 
                       //* Uploading and sending images one by one
                       for (var i in images) {
-                        print('\nImage Path: ${i.path}');
+                        log('\nImage Path: ${i.path}');
 
                         setState(
                           () => _isUploading = true,
@@ -348,7 +349,7 @@ class _ScreenChatState extends State<ScreenChat> {
                     icon: const Icon(
                       Icons.image,
                     ),
-                    color: const Color.fromARGB(255, 77, 179, 162),
+                    color:Colors.deepPurple,
                     iconSize: 26,
                   ),
 
@@ -363,7 +364,7 @@ class _ScreenChatState extends State<ScreenChat> {
                       );
 
                       if (image != null) {
-                        print('\nImage Path: ${image.path}');
+                        log('\nImage Path: ${image.path}');
                         setState(
                           () => _isUploading = true,
                         );
@@ -381,7 +382,7 @@ class _ScreenChatState extends State<ScreenChat> {
                     icon: const Icon(
                       Icons.camera_alt,
                     ),
-                    color: const Color.fromARGB(255, 77, 179, 162),
+                    color: Colors.deepPurple,
                     iconSize: 26,
                   ),
 
@@ -402,7 +403,7 @@ class _ScreenChatState extends State<ScreenChat> {
                 _textController.text = '';
               }
             },
-            color: Color.fromARGB(255, 239, 241, 241),
+            color: const Color.fromARGB(255, 239, 241, 241),
             padding: const EdgeInsets.only(
               top: 10,
               bottom: 10,
@@ -411,7 +412,7 @@ class _ScreenChatState extends State<ScreenChat> {
             ),
             child: Icon(
               Icons.send,
-              color:Color.fromARGB(255, 77, 179, 162),
+              color:Colors.deepPurple,
               size: 27,
             ),
             shape: const CircleBorder(),

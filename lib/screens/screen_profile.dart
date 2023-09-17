@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -30,10 +31,10 @@ class _ScreenProfileState extends State<ScreenProfile> {
       //* Hide keyboard while tap anywhere in the screen
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: Color.fromARGB(255, 206, 240, 238),
+        backgroundColor: Colors.indigo[50],
         //* AppBar
         appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 77, 179, 162),
+          backgroundColor: Colors.deepPurple,
           //* Home Icon
           leading: IconButton(
             onPressed: () {
@@ -88,7 +89,7 @@ class _ScreenProfileState extends State<ScreenProfile> {
             icon: const Icon(Icons.logout),
             foregroundColor: Colors.white,
             label: const Text('LogOut'),
-            backgroundColor: Color.fromARGB(255, 77, 179, 162),
+            backgroundColor: Colors.deepPurple,
           ),
         ),
         //* Body
@@ -152,7 +153,7 @@ class _ScreenProfileState extends State<ScreenProfile> {
                             shape: const CircleBorder(),
                             child: const Icon(
                               Icons.edit,
-                              color: Color.fromARGB(255, 77, 179, 162),
+                              color: Colors.deepPurple,
                             ),
                           ),
                         ),
@@ -168,7 +169,7 @@ class _ScreenProfileState extends State<ScreenProfile> {
                     Container(
                       decoration: BoxDecoration(
                         border: Border.all(),
-                        color: Color.fromARGB(255, 77, 179, 162),
+                        color: Colors.deepPurple,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Padding(
@@ -197,7 +198,7 @@ class _ScreenProfileState extends State<ScreenProfile> {
                           ? null
                           : 'Required Field',
                       style: const TextStyle(
-                        color: Color.fromARGB(255, 66, 88, 79),
+                        color: Color.fromARGB(255, 38, 14, 80),
                         fontWeight: FontWeight.w600,
                         fontSize: 19,
                       ),
@@ -205,12 +206,12 @@ class _ScreenProfileState extends State<ScreenProfile> {
                       decoration: InputDecoration(
                         prefixIcon: const Icon(
                           Icons.person,
-                          color: Color.fromARGB(255, 77, 179, 162),
+                          color: Colors.deepPurple,
                         ),
                         label: const Text(
                           'Name',
                           style: TextStyle(
-                            color: Color.fromARGB(255, 77, 179, 162),
+                            color: Colors.deepPurple,
                           ),
                         ),
                         border: OutlineInputBorder(
@@ -232,7 +233,7 @@ class _ScreenProfileState extends State<ScreenProfile> {
                           ? null
                           : 'Required Field',
                       style: const TextStyle(
-                        color:Color.fromARGB(255, 66, 88, 79),
+                        color: Color.fromARGB(255, 38, 14, 80),
                         fontWeight: FontWeight.w600,
                         fontSize: 19,
                       ),
@@ -241,12 +242,12 @@ class _ScreenProfileState extends State<ScreenProfile> {
                       decoration: InputDecoration(
                         prefixIcon: const Icon(
                           Icons.info_outline,
-                          color: Color.fromARGB(255, 77, 179, 162),
+                          color: Colors.deepPurple,
                         ),
                         label: const Text(
                           'About',
                           style: TextStyle(
-                            color: Color.fromARGB(255, 77, 179, 162),
+                            color: Colors.deepPurple,
                           ),
                         ),
                         border: OutlineInputBorder(
@@ -291,7 +292,7 @@ class _ScreenProfileState extends State<ScreenProfile> {
                           mq.width * .5,
                           mq.height * .06,
                         ),
-                        backgroundColor: Color.fromARGB(255, 77, 179, 162),
+                        backgroundColor: Colors.deepPurple,
                       ),
                     ),
                   ],
@@ -356,7 +357,7 @@ class _ScreenProfileState extends State<ScreenProfile> {
                         await picker.pickImage(source: ImageSource.gallery);
 
                     if (image != null) {
-                      print(
+                      log(
                           '\nImage Path: ${image.path} -- MimeType: ${image.mimeType}');
 
                       setState(
@@ -395,7 +396,7 @@ class _ScreenProfileState extends State<ScreenProfile> {
                         await picker.pickImage(source: ImageSource.camera);
 
                     if (image != null) {
-                      print('\nImage Path: ${image.path}');
+                      log('\nImage Path: ${image.path}');
 
                       setState(
                         () {

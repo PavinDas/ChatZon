@@ -50,10 +50,10 @@ class ProfileDialog extends StatelessWidget {
               width: mq.width * .55,
               child: Text(
                 user.name,
-                style: TextStyle(
+                style:const  TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.indigo[900],
+                  color:  Colors.deepPurple,
                 ),
               ),
             ),
@@ -63,9 +63,9 @@ class ProfileDialog extends StatelessWidget {
               right: 8,
               top: 1,
               child: MaterialButton(
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 minWidth: 0,
-                shape: CircleBorder(),
+                shape: const CircleBorder(),
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.push(
@@ -77,7 +77,7 @@ class ProfileDialog extends StatelessWidget {
                 },
                 child: Icon(
                   Icons.info_outline,
-                  color: Colors.indigo[900],
+                  color: Colors.deepPurple,
                 ),
               ),
             ),

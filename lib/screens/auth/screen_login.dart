@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:chatzone/api/apis.dart';
 import 'package:chatzone/helper/dialogs.dart';
@@ -22,8 +23,8 @@ class _ScreenLoginState extends State<ScreenLogin> {
       (user) async {
         Navigator.pop(context);
         if (user != null) {
-          print('\nuser: ${user.user}');
-          print('\nuserAdditionalInfo: ${user.additionalUserInfo}');
+          log('\nuser: ${user.user}');
+          log('\nuserAdditionalInfo: ${user.additionalUserInfo}');
 
           if ((await APIs.userExist())) {
             Navigator.pushReplacement(
@@ -73,9 +74,11 @@ class _ScreenLoginState extends State<ScreenLogin> {
       // Once signed in, return the UserCredential
       return await APIs.auth.signInWithCredential(credential);
     } catch (e) {
-      print('\n_signInWithGoogle: $e');
+      log('\n_signInWithGoogle: $e');
       Dialogs.showSnackbar(
-          context, 'Something went wrong. Check internet connection');
+        context,
+        'Something went wrong. Check internet connection',
+      );
       return null;
     }
   }
@@ -94,7 +97,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
       backgroundColor: Colors.indigo[50],
       //* AppBar
       appBar: AppBar(
-        backgroundColor:  Color.fromARGB(255, 77, 179, 162),
+        backgroundColor: Colors.deepPurple,
         //* App Title
         title: const Text('Welcome to ChatZon'),
       ),
@@ -115,7 +118,6 @@ class _ScreenLoginState extends State<ScreenLogin> {
             width: mq.width * .8,
             height: mq.height * .07,
             child: ElevatedButton.icon(
-              
               onPressed: () {
                 _handleGoogleButtonClick();
               },
@@ -142,7 +144,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
               style: ElevatedButton.styleFrom(
                 shape: const StadiumBorder(),
                 elevation: 1,
-                backgroundColor:  Color.fromARGB(255, 77, 179, 162),
+                backgroundColor: Colors.deepPurple,
               ),
             ),
           ),

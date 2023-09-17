@@ -39,6 +39,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
+  flutter_notification_channel: ^2.0.0
   http: ^1.1.0
   image_picker: ^1.0.4
   multi_stream_builder: ^0.0.1

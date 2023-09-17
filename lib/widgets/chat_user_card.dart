@@ -28,12 +28,12 @@ class _ChatUserCardState extends State<ChatUserCard> {
     return Card(
       margin: EdgeInsets.symmetric(
         horizontal: mq.width * .01,
-        vertical: 4,
+        vertical: 1.5,
       ),
-      elevation: 0.5,
-      color:const Color.fromARGB(255, 137, 214, 210),
+      elevation: 0.2,
+      color:Colors.deepPurple[100],
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(4),
       ),
       child: InkWell(
         onTap: () {
@@ -87,9 +87,9 @@ class _ChatUserCardState extends State<ChatUserCard> {
               //* User Name
               title: Text(
                 widget.user.name,
-                style: TextStyle(
+                style:  TextStyle(
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: Colors.deepPurple[900],
                 ),
               ),
 
@@ -112,7 +112,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                           child: Container(
                             height: 15,
                             width: 15,
-                            color: Colors.purple[200],
+                            color: Colors.deepPurple,
                           ),
                         )
                       : Text(
