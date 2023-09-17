@@ -17,8 +17,9 @@ class _ScreenSplashState extends State<ScreenSplash> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
+    
       //* Checking the user is existing or not
+    Future.delayed(const Duration(seconds: 2), () {
 
       if (APIs.auth.currentUser != null) {
         log('\nuser: ${APIs.auth.currentUser}');
@@ -49,6 +50,8 @@ class _ScreenSplashState extends State<ScreenSplash> {
         //* App Title
         title: const Text(''), backgroundColor: Colors.indigo[50], elevation: 0,
       ),
+
+      //* Body
       body: Stack(
         children: [
           Positioned(

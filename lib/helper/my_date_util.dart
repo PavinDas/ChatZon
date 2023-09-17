@@ -2,10 +2,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MyDateUtil {
+  //* Get formated time
   static String getFormatedTime(
       {required BuildContext context, required String time}) {
     final date = DateTime.fromMillisecondsSinceEpoch(int.parse(time));
     return TimeOfDay.fromDateTime(date).format(context);
+  }
+
+  //* Get formated time for send and read
+  static String getMessageTime(
+      {required BuildContext context, required String time}) {
+    final DateTime sent = DateTime.fromMillisecondsSinceEpoch(int.parse(time));
+    final DateTime now = DateTime.now();
+
+    final formatedtime = TimeOfDay.fromDateTime(sent).format(context);
+    if (now.day == sent.day &&
+        now.month == sent.month &&
+        now.year == sent.year) {
+      return formatedtime;
+    }
+
+    return now.year == sent.year
+        ? '$formatedtime - ${sent.day} ${_getMonth(sent)}'
+        : '$formatedtime - ${sent.day} ${_getMonth(sent)} ${sent.year}';
   }
 
   //* Get last message time (used in chat user card)
@@ -54,7 +73,7 @@ class MyDateUtil {
     return 'Last seen on ${time.day} $month on $formatedTime';
   }
 
-  //* get month name from month no. or index
+  //* Get month name from month no. or index
   static String _getMonth(DateTime date) {
     switch (date.month) {
       case 1:

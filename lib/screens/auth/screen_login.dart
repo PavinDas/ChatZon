@@ -111,7 +111,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
             child: Image.asset('assets/images/icon.png'),
           ),
 
-          //* Google LogIp icon
+          //* Google LogIn icon
           Positioned(
             bottom: mq.height * .15,
             left: mq.width * .1,
