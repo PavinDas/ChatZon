@@ -27,7 +27,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
     //* Contact card
     return Card(
       margin: EdgeInsets.symmetric(
-        horizontal: mq.width * .01,
+        horizontal: mq.width * .011,
         vertical: 1.5,
       ),
       elevation: 0.2,

@@ -295,11 +295,14 @@ class _MessageCardState extends State<MessageCard> {
                   size: 26,
                 ),
                 name: 'Edit message',
-                onTap: () {},
+                onTap: () {
+                  //* For hiding bottom sheet
+                  Navigator.pop(context);
+                  _showMessageUpdateDialog();
+                },
               ),
 
             //* Delete option
-
             if (isMe)
               _OptionItem(
                 icon: const Icon(
@@ -358,8 +361,92 @@ class _MessageCardState extends State<MessageCard> {
       },
     );
   }
+
+  //* Dialog for update sended message
+  _showMessageUpdateDialog() {
+    String updatedMsg = widget.message.msg;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          contentPadding: const EdgeInsets.only(
+            left: 24,
+            right: 24,
+            top: 20,
+            bottom: 10,
+          ),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+
+          //* Title
+          title: const Row(
+            children: [
+              Icon(
+                Icons.message,
+                color: Colors.deepPurple,
+                size: 28,
+              ),
+              Text(
+                '  Edit message',
+                style: TextStyle(
+                  color: Colors.deepPurple,
+                ),
+              ),
+            ],
+          ),
+
+          //* Content
+          content: TextFormField(
+            onChanged: (value) => updatedMsg = value,
+            maxLines: null,
+            initialValue: updatedMsg,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+            ),
+          ),
+
+          //* Actions
+          actions: [
+            //* Cancel button
+            TextButton(
+              onPressed: () {
+                //* Hide alert dialog
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ),
+
+            //* Edit button
+            TextButton(
+              onPressed: () {
+
+                //* Hide alert dialog
+                Navigator.pop(context);
+                APIs.editMessage(widget.message, updatedMsg);
+              },
+              child: const Text(
+                'Edit',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
+//* Custom option card (copy,edit,delete,send time,read time)
 class _OptionItem extends StatelessWidget {
   final Icon icon;
   final String name;

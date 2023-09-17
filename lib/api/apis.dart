@@ -288,4 +288,13 @@ class APIs {
       await storage.refFromURL(message.msg).delete();
     }
   }
+
+//* Edit message
+  static editMessage(Message message, String editedMsg) async {
+    await firestore
+        .collection('chats/${getConversationId(message.toId)}/messages/')
+        .doc(message.sent)
+        .update({'msg': editedMsg});
+
+  }
 }
