@@ -65,7 +65,7 @@ class _ScreenSplashState extends State<ScreenSplash> {
             width: mq.width,
             child: const Center(
               child: Text(
-                'Welcome',
+                'Chatzon',
                 style: TextStyle(
                   letterSpacing: 1,
                   fontSize: 19,

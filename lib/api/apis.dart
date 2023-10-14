@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:chatzone/models/chat_user.dart';
 import 'package:chatzone/models/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -90,6 +89,28 @@ class APIs {
     return (await firestore.collection('users').doc(user.uid).get()).exists;
   }
 
+  //* For adding new user to chat
+  static Future<bool> addChatUser(String email) async {
+    final data = await firestore
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get();
+    if (data.docs.isNotEmpty && data.docs.first.id != user.uid) {
+      //? User Exist
+
+      firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('my_users')
+          .doc(data.docs.first.id)
+          .set({});
+      return true;
+    } else {
+      //? User Doesn't Exist
+      return false;
+    }
+  }
+
   //* For getting current user info
   static Future<void> getSelfInfo() async {
     await firestore.collection('users').doc(user.uid).get().then(
@@ -130,11 +151,39 @@ class APIs {
   }
 
   //* For getting all users from firestore database
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() {
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers(
+      List<String> userIds) {
     return firestore
         .collection('users')
-        .where('id', isNotEqualTo: user.uid)
+        .where('id', whereIn: userIds)
+        // .where('id', isNotEqualTo: user.uid)
         .snapshots();
+  }
+
+  //* For getting knows users id from firestore database
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getMyUsersId() {
+    return firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('my_users')
+        .snapshots();
+  }
+
+  //* For sending first message to add a new user
+  static Future<void> sendFirstMessage(
+      ChatUser chatUser, String msg, Type type) async {
+    await firestore
+        .collection('users')
+        .doc(chatUser.id)
+        .collection('my_users')
+        .doc(user.uid)
+        .set({}).then(
+      (value) => sendMessage(
+        chatUser,
+        msg,
+        type,
+      ),
+    );
   }
 
   //* For updating user info
@@ -295,6 +344,5 @@ class APIs {
         .collection('chats/${getConversationId(message.toId)}/messages/')
         .doc(message.sent)
         .update({'msg': editedMsg});
-
   }
 }

@@ -10,6 +10,7 @@ import 'dart:developer';
 late Size mq;
 
 void main() {
+  
   WidgetsFlutterBinding.ensureInitialized();
   _initFirebase();
   runApp(

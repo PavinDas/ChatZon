@@ -63,10 +63,11 @@ class _ScreenChatState extends State<ScreenChat> {
           child: Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              flexibleSpace: _appBar(),backgroundColor: Colors.deepPurple,
+              flexibleSpace: _appBar(),
+              backgroundColor: Colors.deepPurple,
             ),
 
-            backgroundColor:Colors.indigo[50],
+            backgroundColor: Colors.indigo[50],
 
             //* Body
             body: Column(
@@ -112,7 +113,7 @@ class _ScreenChatState extends State<ScreenChat> {
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w700,
-                                  color:Colors.deepPurple,
+                                  color: Colors.deepPurple,
                                 ),
                               ),
                             );
@@ -293,7 +294,7 @@ class _ScreenChatState extends State<ScreenChat> {
                     icon: const Icon(
                       Icons.emoji_emotions,
                     ),
-                    color:Colors.deepPurple,
+                    color: Colors.deepPurple,
                     iconSize: 25,
                   ),
 
@@ -312,7 +313,7 @@ class _ScreenChatState extends State<ScreenChat> {
                       decoration: InputDecoration(
                         hintText: 'Type something...',
                         hintStyle: TextStyle(
-                          color:Colors.deepPurple.withOpacity(.6),
+                          color: Colors.deepPurple.withOpacity(.6),
                         ),
                         border: InputBorder.none,
                       ),
@@ -349,7 +350,7 @@ class _ScreenChatState extends State<ScreenChat> {
                     icon: const Icon(
                       Icons.image,
                     ),
-                    color:Colors.deepPurple,
+                    color: Colors.deepPurple,
                     iconSize: 26,
                   ),
 
@@ -399,10 +400,29 @@ class _ScreenChatState extends State<ScreenChat> {
           MaterialButton(
             onPressed: () {
               if (_textController.text.isNotEmpty) {
-                APIs.sendMessage(widget.user, _textController.text, Type.text);
-                _textController.text = '';
+                if (_list.isEmpty) {
+                  //? First Text Message
+
+                  APIs.sendFirstMessage(
+                    widget.user,
+                    _textController.text,
+                    Type.text,
+                  );
+                  _textController.text = '';
+                } else {
+                  //? Simple Text Message
+
+                  APIs.sendMessage(
+                    widget.user,
+                    _textController.text,
+                    Type.text,
+                  );
+                  _textController.text = '';
+                }
               }
             },
+            shape: const CircleBorder(),
+            minWidth: 0,
             color: const Color.fromARGB(255, 239, 241, 241),
             padding: const EdgeInsets.only(
               top: 10,
@@ -410,14 +430,12 @@ class _ScreenChatState extends State<ScreenChat> {
               left: 10,
               right: 5,
             ),
-            child: Icon(
+            child: const Icon(
               Icons.send,
-              color:Colors.deepPurple,
+              color: Colors.deepPurple,
               size: 27,
             ),
-            shape: const CircleBorder(),
-            minWidth: 0,
-          )
+          ),
         ],
       ),
     );

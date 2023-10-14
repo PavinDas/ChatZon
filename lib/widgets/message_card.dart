@@ -319,9 +319,6 @@ class _MessageCardState extends State<MessageCard> {
                     //* For alert dialog
                     Dialogs.showSnackbar(context, 'Message deleted!'),
                   );
-
-                  //* For alert dialog
-                  Dialogs.showSnackbar(context, 'Message deleted!');
                 },
               ),
 
@@ -376,8 +373,9 @@ class _MessageCardState extends State<MessageCard> {
             top: 20,
             bottom: 10,
           ),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
 
           //* Title
           title: const Row(
@@ -403,7 +401,9 @@ class _MessageCardState extends State<MessageCard> {
             initialValue: updatedMsg,
             decoration: InputDecoration(
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(
+                  15,
+                ),
               ),
             ),
           ),
@@ -427,10 +427,14 @@ class _MessageCardState extends State<MessageCard> {
             //* Edit button
             TextButton(
               onPressed: () {
-
                 //* Hide alert dialog
                 Navigator.pop(context);
+                _showMessageUpdateDialog();
                 APIs.editMessage(widget.message, updatedMsg);
+                Navigator.pop(context);
+
+                //* For alert dialog
+                Dialogs.showSnackbar(context, 'Message updated!');
               },
               child: const Text(
                 'Edit',
