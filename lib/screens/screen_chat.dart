@@ -153,7 +153,7 @@ class _ScreenChatState extends State<ScreenChat> {
                         emojiSizeMax: 32 * (Platform.isIOS ? 1.30 : 1.0),
                       ),
                     ),
-                  )
+                  ),
               ],
             ),
           ),

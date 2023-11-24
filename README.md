@@ -1,16 +1,35 @@
-# chatzone
 
-A new Flutter project.
+# ChatZon
 
-## Getting Started
+A simple chatting application using Flutter
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Documentation
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+[Documentation](https://github.com/PavinDas/ChatZon/blob/master/assets/images/Pavin.pdf)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+![Logo](https://github.com/PavinDas/ChatZon/blob/master/assets/images/icon.png)
+
+
+## Tech Stack
+
+**Client:** Flutter
+
+**Server:** Firebase
+
+
+## Features
+
+- Text messaging
+- Image sharing (From Camera & Gallery)
+- Notification badge
+- Search user
+- Edit message
+- Email authentication
+- Edit profile
+## Authors
+
+- [Pavin Das](https://www.github.com/PavinDas)
+
+- [Ganesh V](https://www.github.com/ganesh-2004)
